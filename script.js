@@ -1,5 +1,5 @@
 // ====== CONFIG ======
-const API_BASE = "https://book-tracker-a7oi.onrender.com";
+const API_BASE = "https://YOUR-RENDER-URL.onrender.com"; // <-- change this
 
 // ====== TABS ======
 const tabs = document.querySelectorAll(".tab");
@@ -33,10 +33,12 @@ async function fetchBooks() {
   booksList.innerHTML = "<p class='empty-text'>Loading...</p>";
   try {
     const res = await fetch(`${API_BASE}/books`);
+    if (!res.ok) throw new Error("not ok");
     const data = await res.json();
     books = data;
     renderBooks();
   } catch (err) {
+    console.error(err);
     booksList.innerHTML = "<p class='empty-text'>Error loading books.</p>";
   }
 }
@@ -102,12 +104,11 @@ saveBookBtn.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, status }),
     });
-    if (!res.ok) throw new Error("Failed to save");
-
-    // refetch list
+    if (!res.ok) throw new Error("failed");
     await fetchBooks();
     bookModalBackdrop.classList.remove("show");
   } catch (err) {
+    console.error(err);
     modalMsg.textContent = "Error saving to backend.";
   }
 });

@@ -1,22 +1,32 @@
 // server.js
 import express from "express";
-import fetch from "node-fetch"; // if using node < 18 install node-fetch
+import fetch from "node-fetch";
 import dotenv from "dotenv";
+import cors from "cors";
+
 dotenv.config();
 
 const app = express();
+
+// ---- CORS: allow your GitHub Pages site ----
+app.use(
+  cors({
+    origin: "https://sqrrahman.github.io", // your GitHub Pages origin
+  })
+);
+
 app.use(express.json());
 
-// --- CONFIG ---
+// ----- CONFIG -----
 // repo where books.json lives
 const OWNER = "sqrrahman";
 const REPO = "book-tracker";
 const FILE_PATH = "books.json"; // must exist in repo
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // set in your hosting env
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 const GH_API_BASE = "https://api.github.com";
 
-// helper: get current file
+// helper: get current file (content + sha)
 async function getFile() {
   const res = await fetch(
     `${GH_API_BASE}/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
@@ -28,12 +38,14 @@ async function getFile() {
     }
   );
   if (!res.ok) {
+    const txt = await res.text();
+    console.error("GitHub GET error:", txt);
     throw new Error("Cannot fetch file from GitHub");
   }
-  return res.json(); // contains content (base64) and sha
+  return res.json();
 }
 
-// GET /books
+// GET /books  --> return array from books.json
 app.get("/books", async (req, res) => {
   try {
     const file = await getFile();
@@ -46,13 +58,15 @@ app.get("/books", async (req, res) => {
   }
 });
 
-// POST /books
+// POST /books  --> add a book and commit to GitHub
 app.post("/books", async (req, res) => {
   const { title, status } = req.body;
-  if (!title) return res.status(400).json({ error: "title required" });
+  if (!title) {
+    return res.status(400).json({ error: "title required" });
+  }
 
   try {
-    // 1. get current file
+    // 1. get current books.json
     const file = await getFile();
     const content = Buffer.from(file.content, "base64").toString("utf8");
     const books = JSON.parse(content);
@@ -60,9 +74,13 @@ app.post("/books", async (req, res) => {
     // 2. modify
     books.push({ title, status: status || "Reading" });
 
-    // 3. commit back
-    const newContentB64 = Buffer.from(JSON.stringify(books, null, 2), "utf8").toString("base64");
+    // 3. encode new content
+    const newContentB64 = Buffer.from(
+      JSON.stringify(books, null, 2),
+      "utf8"
+    ).toString("base64");
 
+    // 4. PUT back to GitHub
     const updateRes = await fetch(
       `${GH_API_BASE}/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
       {
@@ -81,7 +99,7 @@ app.post("/books", async (req, res) => {
 
     if (!updateRes.ok) {
       const txt = await updateRes.text();
-      console.error(txt);
+      console.error("GitHub PUT error:", txt);
       return res.status(500).json({ error: "cannot write to github" });
     }
 
