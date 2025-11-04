@@ -41,7 +41,10 @@
   },
   {
     "title": "latest",
-    "status": "Reading"
+    "status": "Reading",
+    "ratings": {
+      "A": 3
+    }
   },
   {
     "title": "dsfds",
