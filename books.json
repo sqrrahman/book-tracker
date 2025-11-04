@@ -1,7 +1,10 @@
 [
   {
     "title": "Starter book",
-    "status": "Reading"
+    "status": "Reading",
+    "ratings": {
+      "A": 4
+    }
   },
   {
     "title": "sdskjhd",
