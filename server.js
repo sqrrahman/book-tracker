@@ -8,25 +8,23 @@ dotenv.config();
 
 const app = express();
 
-// ---- CORS: allow your GitHub Pages site ----
+// allow your GitHub Pages site
 app.use(
   cors({
-    origin: "https://sqrrahman.github.io", // your GitHub Pages origin
+    origin: "https://sqrrahman.github.io",
   })
 );
 
 app.use(express.json());
 
 // ----- CONFIG -----
-// repo where books.json lives
 const OWNER = "sqrrahman";
 const REPO = "book-tracker";
-const FILE_PATH = "books.json"; // must exist in repo
+const FILE_PATH = "books.json";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-
 const GH_API_BASE = "https://api.github.com";
 
-// helper: get current file (content + sha)
+// helper to get file
 async function getFile() {
   const res = await fetch(
     `${GH_API_BASE}/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
@@ -45,7 +43,39 @@ async function getFile() {
   return res.json();
 }
 
-// GET /books  --> return array from books.json
+// helper to write file
+async function putFile(newBooks, oldSha, message) {
+  const newContentB64 = Buffer.from(
+    JSON.stringify(newBooks, null, 2),
+    "utf8"
+  ).toString("base64");
+
+  const updateRes = await fetch(
+    `${GH_API_BASE}/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        Accept: "application/vnd.github+json",
+      },
+      body: JSON.stringify({
+        message,
+        content: newContentB64,
+        sha: oldSha,
+      }),
+    }
+  );
+
+  if (!updateRes.ok) {
+    const txt = await updateRes.text();
+    console.error("GitHub PUT error:", txt);
+    throw new Error("Cannot write to GitHub");
+  }
+}
+
+// =============== ROUTES ===============
+
+// GET all books
 app.get("/books", async (req, res) => {
   try {
     const file = await getFile();
@@ -58,50 +88,51 @@ app.get("/books", async (req, res) => {
   }
 });
 
-// POST /books  --> add a book and commit to GitHub
+// ADD a book
 app.post("/books", async (req, res) => {
   const { title, status } = req.body;
-  if (!title) {
-    return res.status(400).json({ error: "title required" });
-  }
+  if (!title) return res.status(400).json({ error: "title required" });
 
   try {
-    // 1. get current books.json
     const file = await getFile();
     const content = Buffer.from(file.content, "base64").toString("utf8");
     const books = JSON.parse(content);
 
-    // 2. modify
-    books.push({ title, status: status || "Reading" });
+    // default status = "To Read"
+    books.push({ title, status: status || "To Read" });
 
-    // 3. encode new content
-    const newContentB64 = Buffer.from(
-      JSON.stringify(books, null, 2),
-      "utf8"
-    ).toString("base64");
+    await putFile(books, file.sha, `Add book: ${title}`);
 
-    // 4. PUT back to GitHub
-    const updateRes = await fetch(
-      `${GH_API_BASE}/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${GITHUB_TOKEN}`,
-          Accept: "application/vnd.github+json",
-        },
-        body: JSON.stringify({
-          message: `Add book: ${title}`,
-          content: newContentB64,
-          sha: file.sha,
-        }),
-      }
-    );
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
+});
 
-    if (!updateRes.ok) {
-      const txt = await updateRes.text();
-      console.error("GitHub PUT error:", txt);
-      return res.status(500).json({ error: "cannot write to github" });
+// UPDATE status of a book by index
+app.put("/books/:index", async (req, res) => {
+  const idx = parseInt(req.params.index, 10);
+  const { status } = req.body;
+
+  if (Number.isNaN(idx)) {
+    return res.status(400).json({ error: "invalid index" });
+  }
+  if (!status) {
+    return res.status(400).json({ error: "status required" });
+  }
+
+  try {
+    const file = await getFile();
+    const content = Buffer.from(file.content, "base64").toString("utf8");
+    const books = JSON.parse(content);
+
+    if (idx < 0 || idx >= books.length) {
+      return res.status(404).json({ error: "book not found" });
     }
+
+    books[idx].status = status;
+    await putFile(books, file.sha, `Update status of book ${idx} to ${status}`);
 
     res.json({ ok: true });
   } catch (err) {

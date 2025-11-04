@@ -1,5 +1,5 @@
 // ====== CONFIG ======
-const API_BASE = "https://book-tracker-a70i.onrender.com"; // <-- change this
+const API_BASE = "https://book-tracker-a70i.onrender.com"; // real backend
 
 // ====== TABS ======
 const tabs = document.querySelectorAll(".tab");
@@ -62,12 +62,40 @@ function renderBooks() {
     title.className = "book-title";
     title.textContent = book.title;
 
-    const status = document.createElement("div");
-    status.textContent = book.status || "Unknown";
+    // editable status
+    const statusSelect = document.createElement("select");
+    statusSelect.className = "status-select";
+    const options = ["To Read", "Reading", "Completed"];
+    const current = book.status || "To Read";
+    options.forEach((opt) => {
+      const o = document.createElement("option");
+      o.value = opt;
+      o.textContent = opt;
+      if (opt === current) o.selected = true;
+      statusSelect.appendChild(o);
+    });
+
+    statusSelect.addEventListener("change", async (e) => {
+      const newStatus = e.target.value;
+      try {
+        const res = await fetch(`${API_BASE}/books/${idx}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        });
+        if (!res.ok) throw new Error("failed");
+        // update local copy
+        books[idx].status = newStatus;
+      } catch (err) {
+        console.error(err);
+        alert("Failed to update status.");
+        e.target.value = current;
+      }
+    });
 
     row.appendChild(index);
     row.appendChild(title);
-    row.appendChild(status);
+    row.appendChild(statusSelect);
     booksList.appendChild(row);
   });
 }
@@ -76,7 +104,7 @@ function renderBooks() {
 addBookBtn.addEventListener("click", () => {
   bookModalBackdrop.classList.add("show");
   document.getElementById("bookTitle").value = "";
-  document.getElementById("bookStatus").value = "Reading";
+  document.getElementById("bookStatus").value = "To Read"; // default
   modalMsg.textContent = "";
 });
 
