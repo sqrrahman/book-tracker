@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
@@ -8,7 +7,6 @@ dotenv.config();
 
 const app = express();
 
-// allow your GitHub Pages site
 app.use(
   cors({
     origin: "https://sqrrahman.github.io",
@@ -17,14 +15,12 @@ app.use(
 
 app.use(express.json());
 
-// ----- CONFIG -----
 const OWNER = "sqrrahman";
 const REPO = "book-tracker";
 const FILE_PATH = "books.json";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GH_API_BASE = "https://api.github.com";
 
-// helper to get file
 async function getFile() {
   const res = await fetch(
     `${GH_API_BASE}/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
@@ -43,7 +39,6 @@ async function getFile() {
   return res.json();
 }
 
-// helper to write file
 async function putFile(newBooks, oldSha, message) {
   const newContentB64 = Buffer.from(
     JSON.stringify(newBooks, null, 2),
@@ -73,9 +68,6 @@ async function putFile(newBooks, oldSha, message) {
   }
 }
 
-// =============== ROUTES ===============
-
-// GET all books
 app.get("/books", async (req, res) => {
   try {
     const file = await getFile();
@@ -88,7 +80,6 @@ app.get("/books", async (req, res) => {
   }
 });
 
-// ADD a book
 app.post("/books", async (req, res) => {
   const { title, status } = req.body;
   if (!title) return res.status(400).json({ error: "title required" });
@@ -101,7 +92,6 @@ app.post("/books", async (req, res) => {
     books.push({ title, status: status || "To Read" });
 
     await putFile(books, file.sha, `Add book: ${title}`);
-
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
@@ -109,7 +99,6 @@ app.post("/books", async (req, res) => {
   }
 });
 
-// UPDATE status of a book
 app.put("/books/:index", async (req, res) => {
   const idx = parseInt(req.params.index, 10);
   const { status } = req.body;
@@ -132,7 +121,6 @@ app.put("/books/:index", async (req, res) => {
 
     books[idx].status = status;
     await putFile(books, file.sha, `Update status of book ${idx} to ${status}`);
-
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
@@ -140,8 +128,6 @@ app.put("/books/:index", async (req, res) => {
   }
 });
 
-// UPDATE rating of a book
-// PUT /books/:index/rating  body: { user: "A", rating: 6.5 }
 app.put("/books/:index/rating", async (req, res) => {
   const idx = parseInt(req.params.index, 10);
   const { user, rating } = req.body;

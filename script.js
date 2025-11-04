@@ -36,42 +36,61 @@ let books = [];
 // ====== RATE MODAL ELEMENTS ======
 const rateModalBackdrop = document.getElementById("rateModalBackdrop");
 const userCards = document.querySelectorAll(".user-card");
-const ratingSection = document.getElementById("ratingSection");
-const ratingDots = document.getElementById("ratingDots");
+const ratingPentagons = document.getElementById("ratingPentagons");
 const ratingInput = document.getElementById("ratingInput");
 const cancelRateBtn = document.getElementById("cancelRateBtn");
 const okRateBtn = document.getElementById("okRateBtn");
 const rateMsg = document.getElementById("rateMsg");
+const userCardRow = document.getElementById("userCardRow");
 
 let currentBookIndex = null;
 let selectedUser = null;
 let selectedRating = 5;
+let currentUserColor = USER_COLORS.A;
 
-function buildRatingDots() {
-  ratingDots.innerHTML = "";
-  const steps = [];
-  for (let v = 0; v <= 10; v += 0.5) {
-    steps.push(Number(v.toFixed(1)));
-  }
-  steps.forEach((val) => {
-    const dot = document.createElement("div");
-    dot.className = "rating-dot-pick";
-    dot.dataset.value = val;
-    dot.title = val.toString();
-    dot.addEventListener("click", () => {
-      setSelectedRating(val);
+// build 10 pentagons (1..10)
+function buildPentagons() {
+  ratingPentagons.innerHTML = "";
+  for (let i = 1; i <= 10; i++) {
+    const p = document.createElement("div");
+    p.className = "rating-penta";
+    p.dataset.index = i;
+    p.addEventListener("click", () => {
+      // click on 7th → rating = 7.0
+      setSelectedRating(i * 1.0);
     });
-    ratingDots.appendChild(dot);
-  });
+    ratingPentagons.appendChild(p);
+  }
 }
 
+// set rating and repaint pentagons
 function setSelectedRating(val) {
-  selectedRating = val;
-  ratingInput.value = val;
-  const dots = ratingDots.querySelectorAll(".rating-dot-pick");
-  dots.forEach((d) => {
-    const dv = Number(d.dataset.value);
-    d.classList.toggle("active", dv === val);
+  // clamp & snap to 0.5
+  let v = Math.round(val * 2) / 2;
+  if (v < 0) v = 0;
+  if (v > 10) v = 10;
+  selectedRating = v;
+  ratingInput.value = v;
+
+  const whole = Math.floor(v);
+  const hasHalf = v - whole === 0.5;
+
+  const pentas = ratingPentagons.querySelectorAll(".rating-penta");
+  pentas.forEach((p) => {
+    const idx = Number(p.dataset.index);
+    p.style.setProperty("--penta-color", currentUserColor);
+    p.classList.remove("filled", "outline");
+    if (idx <= whole) {
+      p.classList.add("filled");
+      p.style.background = currentUserColor;
+      p.style.borderColor = currentUserColor;
+    } else if (idx === whole + 1 && hasHalf) {
+      p.classList.add("outline");
+      p.style.borderColor = currentUserColor;
+    } else {
+      p.style.background = "rgba(255,255,255,0.04)";
+      p.style.borderColor = "rgba(255,255,255,0.25)";
+    }
   });
 }
 
@@ -240,29 +259,47 @@ function openRateModal(bookIndex) {
   selectedUser = null;
   selectedRating = 5;
   rateMsg.textContent = "";
-  ratingSection.classList.add("hidden");
-  okRateBtn.classList.add("hidden");
-  userCards.forEach((c) => c.classList.remove("active"));
+
+  // reset cards
+  userCards.forEach((c) => {
+    c.classList.remove("active", "disabled");
+  });
+
+  // default color
+  currentUserColor = USER_COLORS.A;
   setSelectedRating(5);
+
   rateModalBackdrop.classList.add("show");
 }
 
+// select user
 userCards.forEach((card) => {
   card.addEventListener("click", () => {
-    userCards.forEach((c) => c.classList.remove("active"));
-    card.classList.add("active");
+    // activate this one
     selectedUser = card.dataset.user;
-    ratingSection.classList.remove("hidden");
-    okRateBtn.classList.remove("hidden");
+    currentUserColor = selectedUser === "A" ? USER_COLORS.A : USER_COLORS.N;
+
+    userCards.forEach((c) => {
+      if (c === card) {
+        c.classList.add("active");
+        c.classList.remove("disabled");
+      } else {
+        // keep space but disable
+        c.classList.add("disabled");
+        c.classList.remove("active");
+      }
+    });
+
+    // repaint pentagons in this color
+    setSelectedRating(selectedRating);
   });
 });
 
 ratingInput.addEventListener("input", () => {
   let val = Number(ratingInput.value);
   if (Number.isNaN(val)) return;
+  // user can type 4.6 -> we round to 4.5
   val = Math.round(val * 2) / 2;
-  if (val < 0) val = 0;
-  if (val > 10) val = 10;
   setSelectedRating(val);
 });
 
@@ -277,7 +314,7 @@ rateModalBackdrop.addEventListener("click", (e) => {
 });
 
 okRateBtn.addEventListener("click", async () => {
-  if (selectedUser === null) {
+  if (!selectedUser) {
     rateMsg.textContent = "Select user first.";
     return;
   }
@@ -296,8 +333,7 @@ okRateBtn.addEventListener("click", async () => {
   }
 });
 
-// init dots
-buildRatingDots();
-
-// initial load
+// init
+buildPentagons();
+setSelectedRating(5);
 fetchBooks();

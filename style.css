@@ -183,6 +183,11 @@ body {
   max-width: 420px;
 }
 
+.modal-wide {
+  max-width: 540px;
+  width: 540px;
+}
+
 .modal h2 {
   margin: 0 0 16px;
 }
@@ -210,7 +215,14 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 14px;
+  margin-top: 18px;
+}
+
+.modal-actions .btn-secondary {
+  order: 0;
+}
+.modal-actions .btn-primary {
+  order: 1;
 }
 
 .btn-secondary,
@@ -245,25 +257,22 @@ body {
 }
 
 /* rating modal extra */
-.hidden {
-  display: none;
-}
-
 .user-card-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .user-card {
-  flex: 0 0 60px;
+  flex: 0 0 68px;
   text-align: center;
-  padding: 8px 0;
-  border-radius: 10px;
+  padding: 10px 0;
+  border-radius: 12px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.04);
   font-weight: 600;
+  transition: 0.15s ease;
 }
 
 .user-card.active[data-user="A"] {
@@ -276,25 +285,45 @@ body {
   color: #0f1534;
 }
 
-.rating-dots {
+.user-card.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.rating-section {
+  margin-top: 6px;
+}
+
+.pentagon-row {
   display: flex;
   gap: 6px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
-.rating-dot-pick {
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+.rating-penta {
+  width: 26px;
+  height: 26px;
   cursor: pointer;
+  /* smoothened pentagon using clip-path */
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
   background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  transition: 0.15s ease;
 }
 
-.rating-dot-pick.active {
-  background: var(--accent);
-  border-color: var(--accent);
+.rating-penta.filled {
+  background: var(--user-a);
+  border-color: var(--user-a);
+}
+
+.rating-penta.outline {
+  background: rgba(255, 255, 255, 0.03);
+  border-width: 1.8px;
+}
+
+#ratingInput {
+  margin-top: 0;
 }
 
 /* FOOTER */
@@ -316,5 +345,9 @@ body {
   }
   .small-link {
     margin-left: 0;
+  }
+  .modal-wide {
+    max-width: 95vw;
+    width: 95vw;
   }
 }
