@@ -1,5 +1,5 @@
 // ====== CONFIG ======
-const API_BASE = "https://YOUR-RENDER-URL.onrender.com"; // <-- change this
+const API_BASE = "https://book-tracker-a70i.onrender.com"; // <-- change this
 
 // ====== TABS ======
 const tabs = document.querySelectorAll(".tab");
