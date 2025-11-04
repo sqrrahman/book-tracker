@@ -44,9 +44,9 @@
           <label>
             Status
             <select id="bookStatus">
+              <option value="To Read">To Read</option>
               <option value="Reading">Reading</option>
               <option value="Completed">Completed</option>
-              <option value="To Read">To Read</option>
             </select>
           </label>
           <div class="modal-actions">
@@ -56,6 +56,35 @@
           <p id="modalMsg" class="small-msg"></p>
         </div>
       </div>
+
+      <!-- Rate Book Modal -->
+      <div class="modal-backdrop" id="rateModalBackdrop">
+        <div class="modal" id="rateModal">
+          <h2 id="rateModalTitle">Rate this book</h2>
+          <p class="small-muted">Select user:</p>
+          <div class="user-card-row">
+            <div class="user-card" data-user="A">A</div>
+            <div class="user-card" data-user="N">N</div>
+          </div>
+
+          <div id="ratingSection" class="hidden">
+            <p class="small-muted">Select rating (0 – 10, step 0.5):</p>
+            <div class="rating-dots" id="ratingDots"></div>
+            <input type="number" id="ratingInput" min="0" max="10" step="0.5" value="5" />
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-secondary" id="cancelRateBtn">Cancel</button>
+            <button class="btn-primary hidden" id="okRateBtn">Okay</button>
+          </div>
+
+          <p id="rateMsg" class="small-msg"></p>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>Hosted on GitHub Pages · Data stored in GitHub via backend</p>
+      </footer>
     </div>
   </body>
 </html>

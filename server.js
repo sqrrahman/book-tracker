@@ -98,7 +98,6 @@ app.post("/books", async (req, res) => {
     const content = Buffer.from(file.content, "base64").toString("utf8");
     const books = JSON.parse(content);
 
-    // default status = "To Read"
     books.push({ title, status: status || "To Read" });
 
     await putFile(books, file.sha, `Add book: ${title}`);
@@ -110,7 +109,7 @@ app.post("/books", async (req, res) => {
   }
 });
 
-// UPDATE status of a book by index
+// UPDATE status of a book
 app.put("/books/:index", async (req, res) => {
   const idx = parseInt(req.params.index, 10);
   const { status } = req.body;
@@ -133,6 +132,48 @@ app.put("/books/:index", async (req, res) => {
 
     books[idx].status = status;
     await putFile(books, file.sha, `Update status of book ${idx} to ${status}`);
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
+// UPDATE rating of a book
+// PUT /books/:index/rating  body: { user: "A", rating: 6.5 }
+app.put("/books/:index/rating", async (req, res) => {
+  const idx = parseInt(req.params.index, 10);
+  const { user, rating } = req.body;
+
+  if (Number.isNaN(idx)) {
+    return res.status(400).json({ error: "invalid index" });
+  }
+  if (!user || (user !== "A" && user !== "N")) {
+    return res.status(400).json({ error: "user must be A or N" });
+  }
+  const val = Number(rating);
+  if (Number.isNaN(val) || val < 0 || val > 10) {
+    return res.status(400).json({ error: "rating must be 0..10" });
+  }
+
+  try {
+    const file = await getFile();
+    const content = Buffer.from(file.content, "base64").toString("utf8");
+    const books = JSON.parse(content);
+
+    if (idx < 0 || idx >= books.length) {
+      return res.status(404).json({ error: "book not found" });
+    }
+
+    if (!books[idx].ratings) books[idx].ratings = {};
+    books[idx].ratings[user] = val;
+
+    await putFile(
+      books,
+      file.sha,
+      `Update rating of book ${idx} for ${user} to ${val}`
+    );
 
     res.json({ ok: true });
   } catch (err) {

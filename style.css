@@ -9,6 +9,8 @@
   --danger: #f87171;
   --radius-lg: 28px;
   --radius-md: 18px;
+  --user-a: #fcbf49;
+  --user-n: #4cc9f0;
 }
 
 *,
@@ -38,11 +40,17 @@ body {
 
 .title {
   font-family: "Cinzel", "Times New Roman", serif;
-  letter-spacing: 0.4rem;
-  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  letter-spacing: 0.35rem;
+  font-size: clamp(2.3rem, 4vw, 3.1rem);
   color: #ffe2bb;
   text-shadow: 0 6px 22px rgba(0, 0, 0, 0.24);
   margin: 0;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: 0.95rem;
 }
 
 .tabs-row {
@@ -69,8 +77,17 @@ body {
   box-shadow: 0 0 29px rgba(167, 139, 250, 0.4);
 }
 
-.add-btn {
+.small-link {
   margin-left: auto;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+.small-link:hover {
+  color: #fff;
+}
+
+.add-btn {
   background: var(--accent);
   border: none;
   color: #1f2937;
@@ -82,10 +99,6 @@ body {
   transition: 0.2s ease;
 }
 
-.add-btn:hover {
-  transform: translateY(-1px);
-}
-
 .panel {
   display: none;
 }
@@ -94,6 +107,7 @@ body {
   display: block;
 }
 
+/* BOOKS LIST */
 .books-list {
   background: rgba(5, 8, 20, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.035);
@@ -109,7 +123,7 @@ body {
   border-radius: 26px;
   padding: 18px 20px;
   display: grid;
-  grid-template-columns: 60px 2fr 180px 180px 70px;
+  grid-template-columns: 60px 2fr 160px 230px;
   align-items: center;
   gap: 14px;
   border: 1px solid rgba(255, 255, 255, 0.01);
@@ -127,6 +141,7 @@ body {
 
 .book-title {
   font-size: 1rem;
+  font-weight: 500;
 }
 
 .status-select {
@@ -137,48 +152,13 @@ body {
   padding: 8px 10px;
 }
 
-.rating {
-  display: flex;
-  gap: 6px;
-}
-
-.rating-dot {
-  width: 14px;
-  height: 14px;
-  background: rgba(243, 207, 167, 0.4);
-  border-radius: 4px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
-}
-
-.rating-dot.filled {
-  background: var(--accent);
-}
-
-.book-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  color: #fca5a5;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.icon-btn.edit {
-  color: #fff;
-}
-
+/* QUOTES */
 .empty-text {
-  color: var(--muted);
   text-align: center;
-  padding: 40px 0;
+  color: var(--muted);
 }
 
-/* Modal */
+/* MODAL */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -187,6 +167,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  z-index: 50;
 }
 
 .modal-backdrop.show {
@@ -198,8 +179,8 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.03);
   border-radius: 16px;
   padding: 22px 20px 16px;
-  min-width: 280px;
-  max-width: 360px;
+  min-width: 300px;
+  max-width: 420px;
 }
 
 .modal h2 {
@@ -213,7 +194,8 @@ body {
 }
 
 .modal input,
-.modal select {
+.modal select,
+.modal textarea {
   width: 100%;
   background: rgba(15, 21, 52, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -221,6 +203,7 @@ body {
   padding: 8px 10px;
   color: #fff;
   margin-top: 6px;
+  font-family: inherit;
 }
 
 .modal-actions {
@@ -249,6 +232,80 @@ body {
   color: #111827;
 }
 
+.small-msg {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: var(--danger);
+}
+
+.small-muted {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+/* rating modal extra */
+.hidden {
+  display: none;
+}
+
+.user-card-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.user-card {
+  flex: 0 0 60px;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+
+.user-card.active[data-user="A"] {
+  background: var(--user-a);
+  color: #1b1b1b;
+}
+
+.user-card.active[data-user="N"] {
+  background: var(--user-n);
+  color: #0f1534;
+}
+
+.rating-dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.rating-dot-pick {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.rating-dot-pick.active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 36px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* RESPONSIVE */
 @media (max-width: 950px) {
   .book-row {
     grid-template-columns: 1fr;
@@ -257,7 +314,7 @@ body {
   .tabs-row {
     flex-wrap: wrap;
   }
-  .add-btn {
+  .small-link {
     margin-left: 0;
   }
 }
