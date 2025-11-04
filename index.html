@@ -23,9 +23,7 @@
 
       <!-- BOOKS PANEL -->
       <section class="panel active" id="booksPanel">
-        <div class="books-list" id="booksList">
-          <!-- JS will render -->
-        </div>
+        <div class="books-list" id="booksList"></div>
       </section>
 
       <!-- QUOTES PANEL -->
@@ -57,16 +55,15 @@
         </div>
       </div>
 
-      <!-- RATING FLOW MODALS -->
-
-      <!-- 1) PICK USER MODAL -->
+      <!-- 1) PICK USER MODAL (extra large) -->
       <div class="modal-backdrop" id="rateUserBackdrop">
-        <div class="modal modal-user">
+        <div class="modal modal-huge" id="rateUserModal">
+          <p class="modal-top-note">the corresponding book title</p>
           <h2>Who is rating?</h2>
           <p class="small-muted">Choose a user:</p>
-          <div class="user-card-row">
-            <div class="user-card" data-user="A">A</div>
-            <div class="user-card" data-user="N">N</div>
+          <div class="user-card-row user-card-row-big">
+            <div class="user-card user-card-big" data-user="A">A</div>
+            <div class="user-card user-card-big" data-user="N">N</div>
           </div>
           <div class="modal-actions">
             <button class="btn-secondary" id="cancelRateUserBtn">Cancel</button>
@@ -75,7 +72,7 @@
         </div>
       </div>
 
-      <!-- 2) ENTER RATING MODAL -->
+      <!-- 2) ENTER RATING MODAL (large) -->
       <div class="modal-backdrop" id="rateValueBackdrop">
         <div class="modal modal-wide" id="rateModal">
           <h2 id="rateModalTitle">Rate this book</h2>

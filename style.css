@@ -34,6 +34,8 @@ body {
   letter-spacing: 0.35rem;
   font-size: clamp(2.3rem, 4vw, 3.1rem);
   color: #ffe2bb;
+  text-shadow: 0 6px 22px rgba(0, 0, 0, 0.24);
+  margin: 0;
 }
 
 .subtitle {
@@ -43,9 +45,9 @@ body {
 
 .tabs-row {
   display: flex;
+  align-items: center;
   gap: 14px;
   margin-bottom: 26px;
-  align-items: center;
 }
 
 .tab {
@@ -55,6 +57,7 @@ body {
   color: #fff;
   padding: 10px 30px;
   border-radius: 999px;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -114,6 +117,11 @@ body {
   place-items: center;
 }
 
+.book-title {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
 .status-select {
   background: rgba(15, 21, 52, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.03);
@@ -127,7 +135,7 @@ body {
   color: var(--muted);
 }
 
-/* modals */
+/* MODALS */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -154,6 +162,18 @@ body {
 .modal-wide {
   max-width: 560px;
   width: 560px;
+}
+
+/* NEW: super-wide user modal */
+.modal-huge {
+  max-width: 1680px; /* about 3x 560 */
+  width: 90vw;
+}
+
+.modal-top-note {
+  margin: 0 0 6px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .modal h2 {
@@ -215,6 +235,13 @@ body {
   gap: 10px;
   margin-bottom: 10px;
 }
+
+/* bigger user cards for first modal */
+.user-card-row-big {
+  gap: 20px;
+  justify-content: flex-start;
+}
+
 .user-card {
   flex: 1;
   text-align: center;
@@ -226,10 +253,22 @@ body {
   font-weight: 600;
   transition: 0.15s ease;
 }
+
+.user-card-big {
+  flex: 0 0 220px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.2rem;
+  border-radius: 26px;
+}
+
 .user-card[data-user="A"].active {
   background: var(--user-a);
   color: #1b1b1b;
 }
+
 .user-card[data-user="N"].active {
   background: var(--user-n);
   color: #0f1534;
@@ -274,7 +313,8 @@ body {
   .book-row {
     grid-template-columns: 1fr;
   }
-  .modal-wide {
+  .modal-wide,
+  .modal-huge {
     max-width: 95vw;
     width: 95vw;
   }
