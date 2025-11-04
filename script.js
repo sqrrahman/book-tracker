@@ -1,54 +1,52 @@
-// ====== CONFIG ======
+// ===== CONFIG =====
 const API_BASE = "https://book-tracker-a70i.onrender.com";
+const USER_COLORS = { A: "#fcbf49", N: "#4cc9f0" };
 
-const USER_COLORS = {
-  A: "#fcbf49",
-  N: "#4cc9f0",
-};
-
-// ====== TABS ======
+// tabs
 const tabs = document.querySelectorAll(".tab");
 const panels = {
   books: document.getElementById("booksPanel"),
   quotes: document.getElementById("quotesPanel"),
 };
-
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     tabs.forEach((t) => t.classList.remove("active"));
     tab.classList.add("active");
-
     const target = tab.dataset.tab;
     Object.values(panels).forEach((p) => p.classList.remove("active"));
     panels[target].classList.add("active");
   });
 });
 
-// ====== BOOKS ======
+// book DOM
 const booksList = document.getElementById("booksList");
-const bookModalBackdrop = document.getElementById("bookModalBackdrop");
 const addBookBtn = document.getElementById("addBookBtn");
+const bookModalBackdrop = document.getElementById("bookModalBackdrop");
 const saveBookBtn = document.getElementById("saveBook");
 const modalMsg = document.getElementById("modalMsg");
 
 let books = [];
 
-// ====== RATE MODAL ELEMENTS ======
-const rateModalBackdrop = document.getElementById("rateModalBackdrop");
-const userCards = document.querySelectorAll(".user-card");
+// rating flow DOM
+const rateUserBackdrop = document.getElementById("rateUserBackdrop");
+const rateUserCards = rateUserBackdrop.querySelectorAll(".user-card");
+const cancelRateUserBtn = document.getElementById("cancelRateUserBtn");
+const rateUserMsg = document.getElementById("rateUserMsg");
+
+const rateValueBackdrop = document.getElementById("rateValueBackdrop");
 const ratingPentagons = document.getElementById("ratingPentagons");
 const ratingInput = document.getElementById("ratingInput");
 const cancelRateBtn = document.getElementById("cancelRateBtn");
 const okRateBtn = document.getElementById("okRateBtn");
 const rateMsg = document.getElementById("rateMsg");
-const userCardRow = document.getElementById("userCardRow");
+const rateForUser = document.getElementById("rateForUser");
 
 let currentBookIndex = null;
 let selectedUser = null;
 let selectedRating = 5;
 let currentUserColor = USER_COLORS.A;
 
-// build 10 pentagons (1..10)
+// build pentagons
 function buildPentagons() {
   ratingPentagons.innerHTML = "";
   for (let i = 1; i <= 10; i++) {
@@ -56,16 +54,13 @@ function buildPentagons() {
     p.className = "rating-penta";
     p.dataset.index = i;
     p.addEventListener("click", () => {
-      // click on 7th → rating = 7.0
-      setSelectedRating(i * 1.0);
+      setSelectedRating(i);
     });
     ratingPentagons.appendChild(p);
   }
 }
 
-// set rating and repaint pentagons
 function setSelectedRating(val) {
-  // clamp & snap to 0.5
   let v = Math.round(val * 2) / 2;
   if (v < 0) v = 0;
   if (v > 10) v = 10;
@@ -78,7 +73,6 @@ function setSelectedRating(val) {
   const pentas = ratingPentagons.querySelectorAll(".rating-penta");
   pentas.forEach((p) => {
     const idx = Number(p.dataset.index);
-    p.style.setProperty("--penta-color", currentUserColor);
     p.classList.remove("filled", "outline");
     if (idx <= whole) {
       p.classList.add("filled");
@@ -94,12 +88,11 @@ function setSelectedRating(val) {
   });
 }
 
-// load from backend
+// fetch books
 async function fetchBooks() {
   booksList.innerHTML = "<p class='empty-text'>Loading...</p>";
   try {
     const res = await fetch(`${API_BASE}/books`);
-    if (!res.ok) throw new Error("not ok");
     const data = await res.json();
     books = data;
     renderBooks();
@@ -112,36 +105,31 @@ async function fetchBooks() {
 function renderRatingRow(label, val, color) {
   const wrap = document.createElement("div");
   wrap.style.display = "flex";
-  wrap.style.alignItems = "center";
   wrap.style.gap = "10px";
-
+  wrap.style.alignItems = "center";
   const lbl = document.createElement("span");
   lbl.textContent = label + ":";
   lbl.style.color = color;
-  lbl.style.minWidth = "24px";
-
-  const dotsWrap = document.createElement("div");
-  dotsWrap.style.display = "flex";
-  dotsWrap.style.gap = "4px";
-
+  const dots = document.createElement("div");
+  dots.style.display = "flex";
+  dots.style.gap = "4px";
   const whole = Math.floor(val || 0);
   for (let i = 0; i < 10; i++) {
-    const dot = document.createElement("div");
-    dot.style.width = "12px";
-    dot.style.height = "12px";
-    dot.style.borderRadius = "4px";
-    dot.style.background = i < whole ? color : "rgba(255,255,255,0.08)";
-    dotsWrap.appendChild(dot);
+    const d = document.createElement("div");
+    d.style.width = "12px";
+    d.style.height = "12px";
+    d.style.borderRadius = "4px";
+    d.style.background = i < whole ? color : "rgba(255,255,255,0.08)";
+    dots.appendChild(d);
   }
-
   wrap.appendChild(lbl);
-  wrap.appendChild(dotsWrap);
+  wrap.appendChild(dots);
   return wrap;
 }
 
 function renderBooks() {
   booksList.innerHTML = "";
-  if (!books || books.length === 0) {
+  if (!books.length) {
     booksList.innerHTML = "<p class='empty-text'>No books yet.</p>";
     return;
   }
@@ -158,11 +146,9 @@ function renderBooks() {
     title.className = "book-title";
     title.textContent = book.title;
 
-    // status select
     const statusSelect = document.createElement("select");
     statusSelect.className = "status-select";
-    const options = ["To Read", "Reading", "Completed"];
-    options.forEach((opt) => {
+    ["To Read", "Reading", "Completed"].forEach((opt) => {
       const o = document.createElement("option");
       o.value = opt;
       o.textContent = opt;
@@ -172,79 +158,62 @@ function renderBooks() {
     statusSelect.addEventListener("change", async (e) => {
       const newStatus = e.target.value;
       try {
-        const res = await fetch(`${API_BASE}/books/${idx}`, {
+        await fetch(`${API_BASE}/books/${idx}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: newStatus }),
         });
-        if (!res.ok) throw new Error("failed");
-        books[idx].status = newStatus;
       } catch (err) {
         console.error(err);
-        alert("Failed to update status.");
-        e.target.value = book.status || "To Read";
       }
     });
 
-    // rating block
     const ratingBlock = document.createElement("div");
     ratingBlock.style.display = "flex";
     ratingBlock.style.flexDirection = "column";
     ratingBlock.style.gap = "4px";
     ratingBlock.style.cursor = "pointer";
 
-    const rA = book.ratings && typeof book.ratings.A !== "undefined" ? book.ratings.A : 0;
-    const rN = book.ratings && typeof book.ratings.N !== "undefined" ? book.ratings.N : 0;
-
+    const rA = book.ratings?.A ?? 0;
+    const rN = book.ratings?.N ?? 0;
     ratingBlock.appendChild(renderRatingRow("A", rA, USER_COLORS.A));
     ratingBlock.appendChild(renderRatingRow("N", rN, USER_COLORS.N));
 
-    ratingBlock.ondblclick = () => {
-      openRateModal(idx);
-    };
+    ratingBlock.ondblclick = () => openRateUserModal(idx);
 
     row.appendChild(index);
     row.appendChild(title);
     row.appendChild(statusSelect);
     row.appendChild(ratingBlock);
-
     booksList.appendChild(row);
   });
 }
 
-// open add-book modal
+// add-book modal
 addBookBtn.addEventListener("click", () => {
   bookModalBackdrop.classList.add("show");
   document.getElementById("bookTitle").value = "";
   document.getElementById("bookStatus").value = "To Read";
   modalMsg.textContent = "";
 });
-
-// close add-book modal
 bookModalBackdrop.addEventListener("click", (e) => {
   if (e.target === bookModalBackdrop || e.target.matches("[data-close-book]")) {
     bookModalBackdrop.classList.remove("show");
   }
 });
-
-// save book
 saveBookBtn.addEventListener("click", async () => {
   const title = document.getElementById("bookTitle").value.trim();
   const status = document.getElementById("bookStatus").value;
-
   if (!title) {
     modalMsg.textContent = "Title required.";
     return;
   }
-
-  modalMsg.textContent = "Saving...";
   try {
-    const res = await fetch(`${API_BASE}/books`, {
+    await fetch(`${API_BASE}/books`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, status }),
     });
-    if (!res.ok) throw new Error("failed");
     await fetchBooks();
     bookModalBackdrop.classList.remove("show");
   } catch (err) {
@@ -253,63 +222,46 @@ saveBookBtn.addEventListener("click", async () => {
   }
 });
 
-// ====== RATE MODAL LOGIC ======
-function openRateModal(bookIndex) {
+// rating flow
+function openRateUserModal(bookIndex) {
   currentBookIndex = bookIndex;
   selectedUser = null;
-  selectedRating = 5;
-  rateMsg.textContent = "";
-
-  // reset cards
-  userCards.forEach((c) => {
-    c.classList.remove("active", "disabled");
-  });
-
-  // default color
-  currentUserColor = USER_COLORS.A;
-  setSelectedRating(5);
-
-  rateModalBackdrop.classList.add("show");
+  rateUserMsg.textContent = "";
+  rateUserCards.forEach((c) => c.classList.remove("active"));
+  rateUserBackdrop.classList.add("show");
 }
 
-// select user
-userCards.forEach((card) => {
+rateUserCards.forEach((card) => {
   card.addEventListener("click", () => {
-    // activate this one
     selectedUser = card.dataset.user;
-    currentUserColor = selectedUser === "A" ? USER_COLORS.A : USER_COLORS.N;
+    currentUserColor = USER_COLORS[selectedUser];
+    rateUserBackdrop.classList.remove("show");
 
-    userCards.forEach((c) => {
-      if (c === card) {
-        c.classList.add("active");
-        c.classList.remove("disabled");
-      } else {
-        // keep space but disable
-        c.classList.add("disabled");
-        c.classList.remove("active");
-      }
-    });
-
-    // repaint pentagons in this color
-    setSelectedRating(selectedRating);
+    rateForUser.textContent = `Rating for: ${selectedUser}`;
+    rateMsg.textContent = "";
+    setSelectedRating(5);
+    rateValueBackdrop.classList.add("show");
   });
+});
+
+cancelRateUserBtn.addEventListener("click", () => {
+  rateUserBackdrop.classList.remove("show");
 });
 
 ratingInput.addEventListener("input", () => {
-  let val = Number(ratingInput.value);
-  if (Number.isNaN(val)) return;
-  // user can type 4.6 -> we round to 4.5
-  val = Math.round(val * 2) / 2;
-  setSelectedRating(val);
+  const val = Number(ratingInput.value);
+  if (!Number.isNaN(val)) {
+    setSelectedRating(val);
+  }
 });
 
 cancelRateBtn.addEventListener("click", () => {
-  rateModalBackdrop.classList.remove("show");
+  rateValueBackdrop.classList.remove("show");
 });
 
-rateModalBackdrop.addEventListener("click", (e) => {
-  if (e.target === rateModalBackdrop) {
-    rateModalBackdrop.classList.remove("show");
+rateValueBackdrop.addEventListener("click", (e) => {
+  if (e.target === rateValueBackdrop) {
+    rateValueBackdrop.classList.remove("show");
   }
 });
 
@@ -319,14 +271,13 @@ okRateBtn.addEventListener("click", async () => {
     return;
   }
   try {
-    const res = await fetch(`${API_BASE}/books/${currentBookIndex}/rating`, {
+    await fetch(`${API_BASE}/books/${currentBookIndex}/rating`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user: selectedUser, rating: selectedRating }),
     });
-    if (!res.ok) throw new Error("failed");
     await fetchBooks();
-    rateModalBackdrop.classList.remove("show");
+    rateValueBackdrop.classList.remove("show");
   } catch (err) {
     console.error(err);
     rateMsg.textContent = "Error saving rating.";

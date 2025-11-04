@@ -57,18 +57,32 @@
         </div>
       </div>
 
-      <!-- Rate Book Modal -->
-      <div class="modal-backdrop" id="rateModalBackdrop">
-        <div class="modal modal-wide" id="rateModal">
-          <h2 id="rateModalTitle">Rate this book</h2>
+      <!-- RATING FLOW MODALS -->
 
-          <p class="small-muted">Select user:</p>
-          <div class="user-card-row" id="userCardRow">
+      <!-- 1) PICK USER MODAL -->
+      <div class="modal-backdrop" id="rateUserBackdrop">
+        <div class="modal modal-user">
+          <h2>Who is rating?</h2>
+          <p class="small-muted">Choose a user:</p>
+          <div class="user-card-row">
             <div class="user-card" data-user="A">A</div>
             <div class="user-card" data-user="N">N</div>
           </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="cancelRateUserBtn">Cancel</button>
+          </div>
+          <p id="rateUserMsg" class="small-msg"></p>
+        </div>
+      </div>
 
-          <div id="ratingSection" class="rating-section">
+      <!-- 2) ENTER RATING MODAL -->
+      <div class="modal-backdrop" id="rateValueBackdrop">
+        <div class="modal modal-wide" id="rateModal">
+          <h2 id="rateModalTitle">Rate this book</h2>
+
+          <p class="small-muted" id="rateForUser">Rating for: A</p>
+
+          <div class="rating-section">
             <p class="small-muted">Select rating (0 – 10, step 0.5):</p>
             <div class="pentagon-row" id="ratingPentagons"></div>
             <input type="number" id="ratingInput" min="0" max="10" step="0.5" value="5" />
