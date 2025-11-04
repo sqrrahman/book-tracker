@@ -2,25 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>My Library</title>
+    <title>My Library (with backend)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Styles -->
     <link rel="stylesheet" href="style.css" />
-
-    <!-- Script -->
     <script defer src="script.js"></script>
   </head>
   <body>
     <div class="page">
       <header class="topbar">
         <h1 class="title">MY LIBRARY</h1>
-        <p class="subtitle">Track books and save favorite quotes — stored in your browser.</p>
+        <p class="subtitle">Books are stored in GitHub now.</p>
       </header>
 
       <div class="tabs-row">
@@ -33,19 +24,13 @@
       <!-- BOOKS PANEL -->
       <section class="panel active" id="booksPanel">
         <div class="books-list" id="booksList">
-          <!-- rendered by JS -->
+          <!-- JS will render -->
         </div>
       </section>
 
       <!-- QUOTES PANEL -->
       <section class="panel" id="quotesPanel">
-        <div class="quotes-header">
-          <h2>Your quotes</h2>
-          <button class="add-btn small" id="addQuoteBtn">+ Add Quote</button>
-        </div>
-        <div class="quotes-list" id="quotesList">
-          <!-- rendered by JS -->
-        </div>
+        <p class="empty-text">Quotes not connected to backend yet.</p>
       </section>
 
       <!-- Add Book Modal -->
@@ -64,39 +49,13 @@
               <option value="To Read">To Read</option>
             </select>
           </label>
-          <label>
-            Rating (0–10)
-            <input type="number" id="bookRating" min="0" max="10" value="7" />
-          </label>
           <div class="modal-actions">
             <button class="btn-secondary" data-close-book>Cancel</button>
             <button class="btn-primary" id="saveBook">Save</button>
           </div>
+          <p id="modalMsg" class="small-msg"></p>
         </div>
       </div>
-
-      <!-- Add Quote Modal -->
-      <div class="modal-backdrop" id="quoteModalBackdrop">
-        <div class="modal">
-          <h2>Add a quote</h2>
-          <label>
-            Quote
-            <textarea id="quoteText" rows="3" placeholder="Write your quote..."></textarea>
-          </label>
-          <label>
-            Source (optional)
-            <input type="text" id="quoteSource" placeholder="Book / Author / Person" />
-          </label>
-          <div class="modal-actions">
-            <button class="btn-secondary" data-close-quote>Cancel</button>
-            <button class="btn-primary" id="saveQuote">Save</button>
-          </div>
-        </div>
-      </div>
-
-      <footer class="footer">
-        <p>Hosted on GitHub Pages · Data stored in your browser (localStorage)</p>
-      </footer>
     </div>
   </body>
 </html>
