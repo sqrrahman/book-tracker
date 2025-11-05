@@ -5,7 +5,6 @@
     <title>Tagores Short Stories</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="style.css" />
-    <!-- module entry -->
     <script type="module" src="js/main.js"></script>
   </head>
   <body>
@@ -13,17 +12,31 @@
       <header class="topbar">
         <h1 class="title">TAGORES SHORT STORIES</h1>
         <!-- burger icon -->
-        <button id="burgerBtn" class="burger-btn" aria-label="Librarian menu">
+        <button id="burgerBtn" class="burger-btn" aria-label="Menu">
           &#9776;
         </button>
       </header>
 
-      <!-- BOOKS PANEL (we keep this as main content) -->
+      <!-- ===== SIDEBAR ===== -->
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h2>Menu</h2>
+          <button id="sidebarCloseBtn" class="sidebar-close" aria-label="Close">&times;</button>
+        </div>
+        <ul class="sidebar-list">
+          <li><button id="sidebarShelfBtn" class="sidebar-item">Shelf</button></li>
+          <li><button id="sidebarLibrarianBtn" class="sidebar-item">Librarian mode</button></li>
+          <li><button id="sidebarAboutBtn" class="sidebar-item">About</button></li>
+        </ul>
+      </aside>
+      <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+      <!-- MAIN CONTENT -->
       <section class="panel active" id="booksPanel">
         <div class="books-list" id="booksList"></div>
       </section>
 
-      <!-- QUOTES PANEL (kept but no tab button points to it now) -->
+      <!-- QUOTES PANEL (kept but hidden in UI) -->
       <section class="panel" id="quotesPanel">
         <p class="empty-text">Quotes not connected to backend yet.</p>
       </section>
@@ -188,7 +201,7 @@
         </div>
       </div>
 
-      <!-- Librarian main modal (unchanged) -->
+      <!-- Librarian main modal -->
       <div class="modal-backdrop" id="librarianBackdrop">
         <div class="modal modal-librarian">
           <h2>Librarian</h2>
@@ -204,7 +217,75 @@
         </div>
       </div>
 
-      <!-- other modals (add, remove, confirm, rename, sort) stay the same -->
+      <!-- Add Books modal -->
+      <div class="modal-backdrop" id="addBooksBackdrop">
+        <div class="modal modal-add-books">
+          <h2>Add Books</h2>
+          <p class="small-muted">Enter titles (one per line, empty lines ignored):</p>
+          <textarea id="addBooksTextarea" rows="10" placeholder="Book 1&#10;Book 2&#10;Book 3"></textarea>
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="addBooksCancel">Cancel</button>
+            <button class="btn-primary" id="addBooksSave">Add</button>
+          </div>
+          <p id="addBooksMsg" class="small-msg"></p>
+        </div>
+      </div>
+
+      <!-- Remove Books modal -->
+      <div class="modal-backdrop" id="removeBooksBackdrop">
+        <div class="modal modal-remove-books">
+          <h2>Remove Books</h2>
+          <p class="small-muted">Enter book numbers separated by commas:</p>
+          <input type="text" id="removeBooksInput" placeholder="e.g. 2,5,6" />
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="removeBooksCancel">Cancel</button>
+            <button class="btn-primary" id="removeBooksNext">Next</button>
+          </div>
+          <p id="removeBooksMsg" class="small-msg"></p>
+        </div>
+      </div>
+
+      <!-- Confirm Delete modal -->
+      <div class="modal-backdrop" id="confirmDeleteBackdrop">
+        <div class="modal modal-confirm-delete">
+          <h2>Confirm Deletion</h2>
+          <ul id="confirmDeleteList" class="qw-list"></ul>
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="confirmDeleteCancel">Cancel</button>
+            <button class="btn-primary" id="confirmDeleteConfirm">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rename modal -->
+      <div class="modal-backdrop" id="renameBackdrop">
+        <div class="modal modal-rename">
+          <h2>Rename Book</h2>
+          <label class="small-muted">Book number:</label>
+          <input type="number" id="renameNumber" min="1" placeholder="e.g. 3" />
+          <button class="btn-primary" id="renameLoadBtn">Okay</button>
+          <div id="renameEditSection" style="display:none; margin-top:10px;">
+            <p class="small-muted" id="renameCurrentTitle"></p>
+            <input type="text" id="renameNewTitle" placeholder="New title" />
+            <div class="modal-actions modal-actions-space">
+              <button class="btn-secondary" id="renameCancelBtn">Cancel</button>
+              <button class="btn-primary" id="renameSaveBtn">Save</button>
+            </div>
+            <p id="renameMsg" class="small-msg"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sort modal -->
+      <div class="modal-backdrop" id="sortBackdrop">
+        <div class="modal modal-sort">
+          <h2>Sort</h2>
+          <p class="small-muted">Sorting options coming soon.</p>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="sortCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
 
       <footer class="footer">
         <p>Hosted on GitHub Pages · Data stored in GitHub via backend</p>

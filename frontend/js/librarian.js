@@ -2,7 +2,6 @@
 import { bulkAdd, bulkRemove, renameBook } from "./api.js";
 
 let librarianBackdrop,
-  burgerBtn,
   libCloseBtn,
   libAddBtn,
   libRemoveBtn,
@@ -34,6 +33,15 @@ let librarianBackdrop,
   sortBackdrop,
   sortCloseBtn;
 
+// NEW: sidebar elements
+let burgerBtn,
+  sidebar,
+  sidebarOverlay,
+  sidebarCloseBtn,
+  sidebarShelfBtn,
+  sidebarLibrarianBtn,
+  sidebarAboutBtn;
+
 let getBooksFn = null;
 let refreshBooksFn = null;
 
@@ -42,12 +50,20 @@ export function initLibrarian({ getBooks, refreshBooks }) {
   refreshBooksFn = refreshBooks;
 
   librarianBackdrop = document.getElementById("librarianBackdrop");
-  burgerBtn = document.getElementById("burgerBtn");
   libCloseBtn = document.getElementById("libCloseBtn");
   libAddBtn = document.getElementById("libAddBtn");
   libRemoveBtn = document.getElementById("libRemoveBtn");
   libRenameBtn = document.getElementById("libRenameBtn");
   libSortBtn = document.getElementById("libSortBtn");
+
+  // sidebar
+  burgerBtn = document.getElementById("burgerBtn");
+  sidebar = document.getElementById("sidebar");
+  sidebarOverlay = document.getElementById("sidebarOverlay");
+  sidebarCloseBtn = document.getElementById("sidebarCloseBtn");
+  sidebarShelfBtn = document.getElementById("sidebarShelfBtn");
+  sidebarLibrarianBtn = document.getElementById("sidebarLibrarianBtn");
+  sidebarAboutBtn = document.getElementById("sidebarAboutBtn");
 
   addBooksBackdrop = document.getElementById("addBooksBackdrop");
   addBooksTextarea = document.getElementById("addBooksTextarea");
@@ -79,7 +95,38 @@ export function initLibrarian({ getBooks, refreshBooks }) {
   sortBackdrop = document.getElementById("sortBackdrop");
   sortCloseBtn = document.getElementById("sortCloseBtn");
 
-  burgerBtn?.addEventListener("click", () => librarianBackdrop.classList.add("show"));
+  // ===== SIDEBAR HANDLERS =====
+  const openSidebar = () => {
+    sidebar?.classList.add("show");
+    sidebarOverlay?.classList.add("show");
+  };
+  const closeSidebar = () => {
+    sidebar?.classList.remove("show");
+    sidebarOverlay?.classList.remove("show");
+  };
+
+  burgerBtn?.addEventListener("click", openSidebar);
+  sidebarCloseBtn?.addEventListener("click", closeSidebar);
+  sidebarOverlay?.addEventListener("click", closeSidebar);
+
+  // Shelf placeholder
+  sidebarShelfBtn?.addEventListener("click", () => {
+    // later you can open a shelf modal or panel
+    closeSidebar();
+  });
+
+  // Librarian: open existing modal
+  sidebarLibrarianBtn?.addEventListener("click", () => {
+    closeSidebar();
+    librarianBackdrop?.classList.add("show");
+  });
+
+  // About: go to about.html
+  sidebarAboutBtn?.addEventListener("click", () => {
+    window.location.href = "about.html";
+  });
+
+  // ====== EXISTING LIBRARIAN MODALS ======
   libCloseBtn?.addEventListener("click", () => librarianBackdrop.classList.remove("show"));
   librarianBackdrop?.addEventListener("click", (e) => {
     if (e.target === librarianBackdrop) librarianBackdrop.classList.remove("show");
@@ -194,7 +241,6 @@ export function initLibrarian({ getBooks, refreshBooks }) {
       return;
     }
     try {
-      // backend expects 0-based
       await renameBook(num - 1, newTitle);
       if (refreshBooksFn) await refreshBooksFn();
       renameBackdrop.classList.remove("show");
