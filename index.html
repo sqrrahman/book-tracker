@@ -35,7 +35,109 @@
         <p class="empty-text">Quotes not connected to backend yet.</p>
       </section>
 
-      <!-- Librarian main modal -->
+      <!-- ============================= -->
+      <!-- Rating: pick user (A or N)    -->
+      <!-- ============================= -->
+      <div class="modal-backdrop" id="rateUserBackdrop">
+        <div class="modal modal-huge">
+          <h2 id="rateUserBookTitle">Rate this book</h2>
+          <p class="small-muted">Who is rating?</p>
+          <div class="user-card-row">
+            <div class="user-card user-card-big" data-user="A">A</div>
+            <div class="user-card user-card-big" data-user="N">N</div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="cancelRateUserBtn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- Rating: pick number           -->
+      <!-- ============================= -->
+      <div class="modal-backdrop" id="rateValueBackdrop">
+        <div class="modal modal-rate">
+          <h2 id="rateModalTitle">Rate this book</h2>
+          <p id="rateForUser" class="small-muted"></p>
+          <div class="rating-section">
+            <div class="shape-row" id="ratingPentagons"></div>
+          </div>
+          <input type="number" id="ratingInput" min="0" max="10" step="0.5" value="5" />
+          <p id="rateMsg" class="small-msg"></p>
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="cancelRateBtn">Cancel</button>
+            <button class="btn-primary" id="okRateBtn">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- Q/W main view                 -->
+      <!-- ============================= -->
+      <div class="modal-backdrop" id="qwBackdrop">
+        <div class="modal modal-qw">
+          <h2 id="qwTitle">Quotes & Words</h2>
+          <div class="qw-grid">
+            <div class="qw-box qw-quotes-a">
+              <h3>A – Quotes</h3>
+              <ul id="qwQuotesA" class="qw-list"></ul>
+            </div>
+            <div class="qw-box qw-quotes-n">
+              <h3>N – Quotes</h3>
+              <ul id="qwQuotesN" class="qw-list"></ul>
+            </div>
+            <div class="qw-box qw-words-a">
+              <h3>A – Words</h3>
+              <ul id="qwWordsA" class="qw-list"></ul>
+            </div>
+            <div class="qw-box qw-words-n">
+              <h3>N – Words</h3>
+              <ul id="qwWordsN" class="qw-list"></ul>
+            </div>
+          </div>
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="qwCloseBtn">Close</button>
+            <button class="btn-primary" id="qwEditBtn">Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- Q/W: pick user to edit        -->
+      <!-- ============================= -->
+      <div class="modal-backdrop" id="qwUserBackdrop">
+        <div class="modal modal-huge">
+          <h2>Choose user</h2>
+          <div class="user-card-row">
+            <div class="user-card user-card-big" data-qw-user="A">A</div>
+            <div class="user-card user-card-big" data-qw-user="N">N</div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="qwUserCancelBtn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- Q/W: actual edit inputs       -->
+      <!-- ============================= -->
+      <div class="modal-backdrop" id="qwEditBackdrop">
+        <div class="modal modal-qw-edit">
+          <h2 id="qwEditTitle">Edit</h2>
+          <p class="small-muted">Leave empty to skip. Existing values are prefilled.</p>
+          <div class="qw-input-grid" id="qwQuotesInputs"></div>
+          <div class="qw-input-grid qw-words-grid" id="qwWordsInputs"></div>
+          <p id="qwEditMsg" class="small-msg"></p>
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="qwEditCancelBtn">Cancel</button>
+            <button class="btn-primary" id="qwEditSaveBtn">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================== -->
+      <!-- Librarian main modal (2x2 buttons)    -->
+      <!-- ===================================== -->
       <div class="modal-backdrop" id="librarianBackdrop">
         <div class="modal modal-librarian">
           <h2>Librarian</h2>
