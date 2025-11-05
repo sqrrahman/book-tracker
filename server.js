@@ -96,6 +96,74 @@ app.post("/books", async (req, res) => {
   }
 });
 
+/* ===================================================== */
+/* ====== SPECIFIC LIBRARIAN ROUTES MUST COME FIRST ==== */
+/* ===================================================== */
+
+// --- Bulk Add ---
+app.post("/books/bulk-add", async (req, res) => {
+  const { titles } = req.body;
+  if (!Array.isArray(titles) || !titles.length)
+    return res.status(400).json({ error: "titles required" });
+  try {
+    const file = await getFile();
+    const content = Buffer.from(file.content, "base64").toString("utf8");
+    const books = JSON.parse(content);
+    titles.forEach((t) => books.push({ title: t, status: "To Read" }));
+    await putFile(books, file.sha, `Bulk add ${titles.length} books`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
+// --- Bulk Remove ---
+// expects 1-based numbers from frontend, we convert in server
+app.delete("/books/bulk-remove", async (req, res) => {
+  const { indexes } = req.body;
+  if (!Array.isArray(indexes) || !indexes.length)
+    return res.status(400).json({ error: "indexes required" });
+  try {
+    const file = await getFile();
+    const content = Buffer.from(file.content, "base64").toString("utf8");
+    let books = JSON.parse(content);
+    const sorted = indexes.sort((a, b) => b - a);
+    sorted.forEach((i) => {
+      if (i >= 1 && i <= books.length) books.splice(i - 1, 1);
+    });
+    await putFile(books, file.sha, `Bulk remove ${indexes.length} books`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
+// --- Rename (0-based index) ---
+app.put("/books/rename", async (req, res) => {
+  const { index, newTitle } = req.body;
+  if (index == null || !newTitle)
+    return res.status(400).json({ error: "index and newTitle required" });
+  try {
+    const file = await getFile();
+    const content = Buffer.from(file.content, "base64").toString("utf8");
+    const books = JSON.parse(content);
+    if (index < 0 || index >= books.length)
+      return res.status(404).json({ error: "book not found" });
+    books[index].title = newTitle;
+    await putFile(books, file.sha, `Rename book ${index} to ${newTitle}`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
+/* =============================================== */
+/* ====== GENERIC /books/:index ROUTES AFTER ===== */
+/* =============================================== */
+
 // --- Update book status ---
 app.put("/books/:index", async (req, res) => {
   const idx = parseInt(req.params.index, 10);
@@ -171,67 +239,6 @@ app.put("/books/:index/qw", async (req, res) => {
     if (Array.isArray(words)) books[idx].words[user] = words;
 
     await putFile(books, file.sha, `Update quotes/words of book ${idx} for ${user}`);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "server error" });
-  }
-});
-
-// ===== NEW ENDPOINTS =====
-
-// --- Bulk Add ---
-app.post("/books/bulk-add", async (req, res) => {
-  const { titles } = req.body;
-  if (!Array.isArray(titles) || !titles.length)
-    return res.status(400).json({ error: "titles required" });
-  try {
-    const file = await getFile();
-    const content = Buffer.from(file.content, "base64").toString("utf8");
-    const books = JSON.parse(content);
-    titles.forEach((t) => books.push({ title: t, status: "To Read" }));
-    await putFile(books, file.sha, `Bulk add ${titles.length} books`);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "server error" });
-  }
-});
-
-// --- Bulk Remove ---
-app.delete("/books/bulk-remove", async (req, res) => {
-  const { indexes } = req.body;
-  if (!Array.isArray(indexes) || !indexes.length)
-    return res.status(400).json({ error: "indexes required" });
-  try {
-    const file = await getFile();
-    const content = Buffer.from(file.content, "base64").toString("utf8");
-    let books = JSON.parse(content);
-    const sorted = indexes.sort((a, b) => b - a);
-    sorted.forEach((i) => {
-      if (i >= 1 && i <= books.length) books.splice(i - 1, 1);
-    });
-    await putFile(books, file.sha, `Bulk remove ${indexes.length} books`);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "server error" });
-  }
-});
-
-// --- Rename ---
-app.put("/books/rename", async (req, res) => {
-  const { index, newTitle } = req.body;
-  if (index == null || !newTitle)
-    return res.status(400).json({ error: "index and newTitle required" });
-  try {
-    const file = await getFile();
-    const content = Buffer.from(file.content, "base64").toString("utf8");
-    const books = JSON.parse(content);
-    if (index < 0 || index >= books.length)
-      return res.status(404).json({ error: "book not found" });
-    books[index].title = newTitle;
-    await putFile(books, file.sha, `Rename book ${index} to ${newTitle}`);
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
