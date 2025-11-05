@@ -166,25 +166,31 @@ body {
   padding: 28px 24px 20px;
 }
 
-/* user modal bigger, 40% screen */
+/* user modal bigger, 40% screen and centered content */
 .modal-huge {
   max-width: 40vw;
   width: 40vw;
   min-width: 520px;
   padding: 28px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  text-align: center;
 }
 
 .modal-top-note {
-  margin: 0 0 6px;
+  margin: 0;
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.65);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  width: 100%;
 }
 
 .modal h2 {
-  margin: 0 0 16px;
+  margin: 0;
 }
 
 .modal input,
@@ -210,9 +216,10 @@ input[type="number"] {
 
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 10px;
   margin-top: 18px;
+  width: 100%;
 }
 
 .btn-secondary,
@@ -251,12 +258,14 @@ input[type="number"] {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
+  justify-content: center;
+  width: 100%;
 }
 
 /* bigger user cards for first modal */
 .user-card-row-big {
   gap: 20px;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .user-card {
