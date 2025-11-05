@@ -76,7 +76,10 @@
       <!-- ============================= -->
       <div class="modal-backdrop" id="qwBackdrop">
         <div class="modal modal-qw">
-          <h2 id="qwTitle">Quotes & Words</h2>
+          <div class="modal-qw-header">
+            <h2 id="qwTitle">Quotes &amp; Words</h2>
+            <button class="btn-primary qw-edit-top" id="qwEditBtn">Edit</button>
+          </div>
           <div class="qw-grid">
             <div class="qw-box qw-quotes-a">
               <h3>A – Quotes</h3>
@@ -94,10 +97,6 @@
               <h3>N – Words</h3>
               <ul id="qwWordsN" class="qw-list"></ul>
             </div>
-          </div>
-          <div class="modal-actions modal-actions-space">
-            <button class="btn-secondary" id="qwCloseBtn">Close</button>
-            <button class="btn-primary" id="qwEditBtn">Edit</button>
           </div>
         </div>
       </div>
@@ -124,7 +123,7 @@
       <div class="modal-backdrop" id="qwEditBackdrop">
         <div class="modal modal-qw-edit">
           <h2 id="qwEditTitle">Edit</h2>
-          <p class="small-muted">Leave empty to skip. Existing values are prefilled.</p>
+          <p class="small-muted">Press Enter to go to next input. Empty values are ignored.</p>
           <div class="qw-input-grid" id="qwQuotesInputs"></div>
           <div class="qw-input-grid qw-words-grid" id="qwWordsInputs"></div>
           <p id="qwEditMsg" class="small-msg"></p>

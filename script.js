@@ -44,7 +44,6 @@ const qwQuotesN = document.getElementById("qwQuotesN");
 const qwWordsA = document.getElementById("qwWordsA");
 const qwWordsN = document.getElementById("qwWordsN");
 const qwEditBtn = document.getElementById("qwEditBtn");
-const qwCloseBtn = document.getElementById("qwCloseBtn");
 
 const qwUserBackdrop = document.getElementById("qwUserBackdrop");
 const qwUserCards = qwUserBackdrop ? qwUserBackdrop.querySelectorAll("[data-qw-user]") : [];
@@ -247,6 +246,13 @@ ratingInput?.addEventListener("change", () => {
   const val = Number(ratingInput.value);
   if (!Number.isNaN(val)) setSelectedRating(val);
 });
+/* Enter === Save rating */
+ratingInput?.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    okRateBtn?.click();
+  }
+});
 cancelRateBtn?.addEventListener("click", () => {
   rateValueBackdrop.classList.remove("show");
 });
@@ -300,7 +306,6 @@ function fillList(ul, arr) {
   });
 }
 
-qwCloseBtn?.addEventListener("click", () => qwBackdrop.classList.remove("show"));
 qwBackdrop?.addEventListener("click", (e) => {
   if (e.target === qwBackdrop) qwBackdrop.classList.remove("show");
 });
@@ -330,6 +335,7 @@ qwUserCards.forEach((card) => {
     }
     if (qwEditMsg) qwEditMsg.textContent = "";
     qwEditBackdrop.classList.add("show");
+    focusFirstQwInput();
   });
 });
 
@@ -340,7 +346,34 @@ function buildQwInputs(container, count, existing) {
     const inp = document.createElement("input");
     inp.type = "text";
     inp.value = existing[i] || "";
+    // enter => go to next input
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        focusNextQwInput(container, inp);
+      }
+    });
     container.appendChild(inp);
+  }
+}
+
+function focusFirstQwInput() {
+  const first = qwEditBackdrop?.querySelector("input");
+  if (first) first.focus();
+}
+
+function focusNextQwInput(container, current) {
+  const inputs = Array.from(container.querySelectorAll("input"));
+  const idx = inputs.indexOf(current);
+  if (idx >= 0 && idx < inputs.length - 1) {
+    inputs[idx + 1].focus();
+  } else {
+    // if it's the last in that container, try the next container
+    const all = Array.from(qwEditBackdrop.querySelectorAll("input"));
+    const allIdx = all.indexOf(current);
+    if (allIdx >= 0 && allIdx < all.length - 1) {
+      all[allIdx + 1].focus();
+    }
   }
 }
 
