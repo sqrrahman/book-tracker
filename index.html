@@ -5,7 +5,8 @@
     <title>My Library (with backend)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="style.css" />
-    <script defer src="script.js"></script>
+    <!-- cache-bust JS -->
+    <script defer src="script.js?v=2"></script>
   </head>
   <body>
     <div class="page">
@@ -34,9 +35,7 @@
         <p class="empty-text">Quotes not connected to backend yet.</p>
       </section>
 
-      <!-- ===================================== -->
-      <!-- Librarian main modal (2x2 buttons) -->
-      <!-- ===================================== -->
+      <!-- Librarian main modal -->
       <div class="modal-backdrop" id="librarianBackdrop">
         <div class="modal modal-librarian">
           <h2>Librarian</h2>
@@ -52,7 +51,7 @@
         </div>
       </div>
 
-      <!-- ========== Add Books modal ========== -->
+      <!-- Add Books modal -->
       <div class="modal-backdrop" id="addBooksBackdrop">
         <div class="modal modal-add-books">
           <h2>Add Books</h2>
@@ -66,7 +65,7 @@
         </div>
       </div>
 
-      <!-- ========== Remove Books modal ========== -->
+      <!-- Remove Books modal -->
       <div class="modal-backdrop" id="removeBooksBackdrop">
         <div class="modal modal-remove-books">
           <h2>Remove Books</h2>
@@ -80,7 +79,7 @@
         </div>
       </div>
 
-      <!-- ========== Confirm Delete modal ========== -->
+      <!-- Confirm Delete modal -->
       <div class="modal-backdrop" id="confirmDeleteBackdrop">
         <div class="modal modal-confirm-delete">
           <h2>Confirm Deletion</h2>
@@ -92,7 +91,7 @@
         </div>
       </div>
 
-      <!-- ========== Rename modal ========== -->
+      <!-- Rename modal -->
       <div class="modal-backdrop" id="renameBackdrop">
         <div class="modal modal-rename">
           <h2>Rename Book</h2>
@@ -111,7 +110,7 @@
         </div>
       </div>
 
-      <!-- ========== Sort placeholder modal ========== -->
+      <!-- Sort modal -->
       <div class="modal-backdrop" id="sortBackdrop">
         <div class="modal modal-sort">
           <h2>Sort</h2>
