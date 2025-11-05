@@ -160,20 +160,27 @@ body {
 }
 
 .modal-wide {
-  max-width: 560px;
-  width: 560px;
+  max-width: 40vw;
+  width: 40vw;
+  min-width: 520px;
+  padding: 28px 24px 20px;
 }
 
-/* NEW: super-wide user modal */
+/* user modal bigger, 40% screen */
 .modal-huge {
-  max-width: 1680px; /* about 3x 560 */
-  width: 90vw;
+  max-width: 40vw;
+  width: 40vw;
+  min-width: 520px;
+  padding: 28px 24px 20px;
 }
 
 .modal-top-note {
   margin: 0 0 6px;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.65);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .modal h2 {
@@ -189,6 +196,16 @@ body {
   padding: 8px 10px;
   color: #fff;
   margin-top: 6px;
+}
+
+/* remove arrows from number input */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .modal-actions {
@@ -264,6 +281,17 @@ body {
   border-radius: 26px;
 }
 
+.user-card[data-user="A"] {
+  background: rgba(252, 191, 73, 0.1);
+  border-color: rgba(252, 191, 73, 0.6);
+  color: #fff4dd;
+}
+.user-card[data-user="N"] {
+  background: rgba(76, 201, 240, 0.08);
+  border-color: rgba(76, 201, 240, 0.6);
+  color: #f5fcff;
+}
+
 .user-card[data-user="A"].active {
   background: var(--user-a);
   color: #1b1b1b;
@@ -274,32 +302,24 @@ body {
   color: #0f1534;
 }
 
-/* rating pentagons */
+/* rating shapes */
 .rating-section {
   margin-top: 6px;
 }
-.pentagon-row {
+.shape-row {
   display: flex;
   gap: 6px;
   margin-bottom: 10px;
   flex-wrap: wrap;
 }
-.rating-penta {
+.rating-square {
   width: 26px;
   height: 26px;
-  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  border-radius: 6px;
   background: rgba(255, 255, 255, 0.04);
   border: 1.5px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
   transition: 0.15s ease;
-}
-.rating-penta.filled {
-  background: var(--user-a);
-  border-color: var(--user-a);
-}
-.rating-penta.outline {
-  background: rgba(255, 255, 255, 0.03);
-  border-width: 1.8px;
 }
 
 .footer {
@@ -307,6 +327,15 @@ body {
   text-align: center;
   color: var(--muted);
   font-size: 0.8rem;
+}
+
+/* small rating squares in list */
+.rating-small-square {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 @media (max-width: 950px) {
@@ -317,5 +346,6 @@ body {
   .modal-huge {
     max-width: 95vw;
     width: 95vw;
+    min-width: 0;
   }
 }

@@ -25,13 +25,12 @@ const bookModalBackdrop = document.getElementById("bookModalBackdrop");
 const saveBookBtn = document.getElementById("saveBook");
 const modalMsg = document.getElementById("modalMsg");
 
-let books = [];
-
 // rating flow DOM
 const rateUserBackdrop = document.getElementById("rateUserBackdrop");
 const rateUserCards = rateUserBackdrop.querySelectorAll(".user-card");
 const cancelRateUserBtn = document.getElementById("cancelRateUserBtn");
 const rateUserMsg = document.getElementById("rateUserMsg");
+const rateUserBookTitle = document.getElementById("rateUserBookTitle");
 
 const rateValueBackdrop = document.getElementById("rateValueBackdrop");
 const ratingPentagons = document.getElementById("ratingPentagons");
@@ -41,17 +40,20 @@ const okRateBtn = document.getElementById("okRateBtn");
 const rateMsg = document.getElementById("rateMsg");
 const rateForUser = document.getElementById("rateForUser");
 
+let books = [];
+
+// state for rating
 let currentBookIndex = null;
 let selectedUser = null;
 let selectedRating = 5;
 let currentUserColor = USER_COLORS.A;
 
-// build pentagons
+// build squares (10)
 function buildPentagons() {
   ratingPentagons.innerHTML = "";
   for (let i = 1; i <= 10; i++) {
     const p = document.createElement("div");
-    p.className = "rating-penta";
+    p.className = "rating-square";
     p.dataset.index = i;
     p.addEventListener("click", () => {
       setSelectedRating(i);
@@ -61,6 +63,7 @@ function buildPentagons() {
 }
 
 function setSelectedRating(val) {
+  // round to .5
   let v = Math.round(val * 2) / 2;
   if (v < 0) v = 0;
   if (v > 10) v = 10;
@@ -70,20 +73,22 @@ function setSelectedRating(val) {
   const whole = Math.floor(v);
   const hasHalf = v - whole === 0.5;
 
-  const pentas = ratingPentagons.querySelectorAll(".rating-penta");
-  pentas.forEach((p) => {
+  const shapes = ratingPentagons.querySelectorAll(".rating-square");
+  shapes.forEach((p) => {
     const idx = Number(p.dataset.index);
-    p.classList.remove("filled", "outline");
+    p.classList.remove("filled", "half");
+    // reset
+    p.style.background = "rgba(255,255,255,0.04)";
+    p.style.borderColor = "rgba(255,255,255,0.25)";
+
     if (idx <= whole) {
-      p.classList.add("filled");
+      // fully filled
       p.style.background = currentUserColor;
       p.style.borderColor = currentUserColor;
     } else if (idx === whole + 1 && hasHalf) {
-      p.classList.add("outline");
+      // half filled, lower-left triangle
+      p.style.background = `linear-gradient(135deg, ${currentUserColor} 50%, rgba(255,255,255,0.04) 50%)`;
       p.style.borderColor = currentUserColor;
-    } else {
-      p.style.background = "rgba(255,255,255,0.04)";
-      p.style.borderColor = "rgba(255,255,255,0.25)";
     }
   });
 }
@@ -113,13 +118,24 @@ function renderRatingRow(label, val, color) {
   const dots = document.createElement("div");
   dots.style.display = "flex";
   dots.style.gap = "4px";
-  const whole = Math.floor(val || 0);
+
+  const value = Number(val) || 0;
+  const whole = Math.floor(value);
+  const hasHalf = value - whole === 0.5;
+
   for (let i = 0; i < 10; i++) {
     const d = document.createElement("div");
-    d.style.width = "12px";
-    d.style.height = "12px";
-    d.style.borderRadius = "4px";
-    d.style.background = i < whole ? color : "rgba(255,255,255,0.08)";
+    d.className = "rating-small-square";
+    if (i < whole) {
+      d.style.background = color;
+      d.style.borderColor = color;
+    } else if (i === whole && hasHalf) {
+      d.style.background = `linear-gradient(135deg, ${color} 50%, rgba(255,255,255,0.04) 50%)`;
+      d.style.borderColor = color;
+    } else {
+      d.style.background = "rgba(255,255,255,0.04)";
+      d.style.borderColor = "rgba(255,255,255,0.04)";
+    }
     dots.appendChild(d);
   }
   wrap.appendChild(lbl);
@@ -228,6 +244,8 @@ function openRateUserModal(bookIndex) {
   selectedUser = null;
   rateUserMsg.textContent = "";
   rateUserCards.forEach((c) => c.classList.remove("active"));
+  // set actual book title
+  rateUserBookTitle.textContent = books[bookIndex]?.title || "Book";
   rateUserBackdrop.classList.add("show");
 }
 
@@ -235,11 +253,21 @@ rateUserCards.forEach((card) => {
   card.addEventListener("click", () => {
     selectedUser = card.dataset.user;
     currentUserColor = USER_COLORS[selectedUser];
+    rateUserCards.forEach((c) => c.classList.remove("active"));
+    card.classList.add("active");
     rateUserBackdrop.classList.remove("show");
 
     rateForUser.textContent = `Rating for: ${selectedUser}`;
     rateMsg.textContent = "";
-    setSelectedRating(5);
+
+    // read existing value for this user/book
+    const currentBook = books[currentBookIndex];
+    const existing =
+      currentBook && currentBook.ratings && currentBook.ratings[selectedUser] != null
+        ? currentBook.ratings[selectedUser]
+        : 0;
+
+    setSelectedRating(existing);
     rateValueBackdrop.classList.add("show");
   });
 });
