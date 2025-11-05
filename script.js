@@ -59,6 +59,7 @@ function buildPentagons() {
 }
 
 function setSelectedRating(val) {
+  // round to nearest 0.5
   let v = Math.round(val * 2) / 2;
   if (v < 0) v = 0;
   if (v > 10) v = 10;
@@ -77,7 +78,8 @@ function setSelectedRating(val) {
       sq.style.background = currentUserColor;
       sq.style.borderColor = currentUserColor;
     } else if (idx === whole + 1 && hasHalf) {
-      sq.style.background = `linear-gradient(135deg, ${currentUserColor} 50%, rgba(255,255,255,0.04) 50%)`;
+      // "\" diagonal = 45deg
+      sq.style.background = `linear-gradient(45deg, ${currentUserColor} 50%, rgba(255,255,255,0.04) 50%)`;
       sq.style.borderColor = currentUserColor;
     }
   });
@@ -122,7 +124,7 @@ function renderRatingRow(label, val, color) {
       d.style.background = color;
       d.style.borderColor = color;
     } else if (i === whole && hasHalf) {
-      d.style.background = `linear-gradient(135deg, ${color} 50%, rgba(255,255,255,0.04) 50%)`;
+      d.style.background = `linear-gradient(45deg, ${color} 50%, rgba(255,255,255,0.04) 50%)`;
       d.style.borderColor = color;
     }
     dots.appendChild(d);
@@ -257,7 +259,8 @@ cancelRateUserBtn.addEventListener("click", () => {
   rateUserBackdrop.classList.remove("show");
 });
 
-ratingInput.addEventListener("input", () => {
+// IMPORTANT: use change, not input
+ratingInput.addEventListener("change", () => {
   const v = Number(ratingInput.value);
   if (!Number.isNaN(v)) setSelectedRating(v);
 });
