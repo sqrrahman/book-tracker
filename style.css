@@ -179,11 +179,6 @@ body {
   margin-bottom: 4px;
 }
 
-.modal h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
 /* rate modal */
 .modal-rate {
   width: 62vw;
@@ -191,23 +186,26 @@ body {
   min-height: 40vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* center all */
   gap: 14px;
   padding: 26px 28px 20px;
+  text-align: center; /* so label centers */
 }
 
 #rateModalTitle {
   width: 100%;
   font-size: 1.6rem;
+  text-align: center;
 }
 
-.small-muted {
-  font-size: 0.9rem;
-  color: var(--muted);
+#rateForUser {
+  width: 100%;
+  text-align: center;
 }
 
 .rating-section {
   width: 100%;
+  text-align: center;
 }
 
 .rating-line {
@@ -362,4 +360,14 @@ input[type="number"] {
   .rating-line {
     flex-direction: column;
   }
+}
+
+/* remove arrows everywhere */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
