@@ -70,7 +70,7 @@ let currentQwUser = null;
 
 // ===== BUILD RATING SQUARES =====
 function buildPentagons() {
-  if (!ratingPentagons) return; // <- guard
+  if (!ratingPentagons) return;
   ratingPentagons.innerHTML = "";
   for (let i = 1; i <= 10; i++) {
     const sq = document.createElement("div");
@@ -83,14 +83,14 @@ function buildPentagons() {
 }
 
 function setSelectedRating(val) {
-  if (!ratingInput) return; // no rating UI present
+  if (!ratingInput) return;
   let v = Math.round(val * 2) / 2;
   if (v < 0) v = 0;
   if (v > 10) v = 10;
   selectedRating = v;
   ratingInput.value = v;
 
-  if (!ratingPentagons) return; // guard
+  if (!ratingPentagons) return;
   const whole = Math.floor(v);
   const hasHalf = v - whole === 0.5;
 
@@ -203,7 +203,6 @@ function renderBooks() {
 
 // ===== RATING FLOW =====
 function openRateUserModal(bookIndex) {
-  // if rating UI isn't on this page, just do nothing
   if (!rateUserBackdrop) return;
   currentBookIndex = bookIndex;
   selectedUser = null;
