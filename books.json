@@ -12,7 +12,10 @@
   },
   {
     "title": "ললাটের লিখন",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 5.5
+    }
   },
   {
     "title": "প্রায়শ্চিত্ত",
