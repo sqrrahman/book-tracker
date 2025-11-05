@@ -1,6 +1,7 @@
 {
   "name": "book-tracker-backend",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "description": "Backend API for My Library project — supports ratings, quotes, and Librarian bulk operations via GitHub.",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -11,5 +12,10 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "node-fetch": "^3.3.2"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "sqrrahman",
+  "license": "MIT"
 }

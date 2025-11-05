@@ -2,7 +2,7 @@
 const API_BASE = "https://book-tracker-a70i.onrender.com";
 const USER_COLORS = { A: "#fcbf49", N: "#4cc9f0" };
 
-// tabs
+// ===== TABS =====
 const tabs = document.querySelectorAll(".tab");
 const panels = {
   books: document.getElementById("booksPanel"),
@@ -18,16 +18,16 @@ tabs.forEach((tab) => {
   });
 });
 
-// book DOM
+// ===== BOOK DOM =====
 const booksList = document.getElementById("booksList");
-const addBookBtn = document.getElementById("addBookBtn");
+const addBookBtn = document.getElementById("addBookBtn"); // no longer visible
 const bookModalBackdrop = document.getElementById("bookModalBackdrop");
 const saveBookBtn = document.getElementById("saveBook");
 const modalMsg = document.getElementById("modalMsg");
 
-// rating flow DOM
+// ===== RATING DOM =====
 const rateUserBackdrop = document.getElementById("rateUserBackdrop");
-const rateUserCards = rateUserBackdrop.querySelectorAll(".user-card");
+const rateUserCards = rateUserBackdrop ? rateUserBackdrop.querySelectorAll(".user-card") : [];
 const cancelRateUserBtn = document.getElementById("cancelRateUserBtn");
 const rateUserBookTitle = document.getElementById("rateUserBookTitle");
 
@@ -40,7 +40,7 @@ const rateMsg = document.getElementById("rateMsg");
 const rateForUser = document.getElementById("rateForUser");
 const rateModalTitle = document.getElementById("rateModalTitle");
 
-// QW DOM
+// ===== QW DOM =====
 const qwBackdrop = document.getElementById("qwBackdrop");
 const qwTitle = document.getElementById("qwTitle");
 const qwQuotesA = document.getElementById("qwQuotesA");
@@ -51,7 +51,7 @@ const qwEditBtn = document.getElementById("qwEditBtn");
 const qwCloseBtn = document.getElementById("qwCloseBtn");
 
 const qwUserBackdrop = document.getElementById("qwUserBackdrop");
-const qwUserCards = qwUserBackdrop.querySelectorAll("[data-qw-user]");
+const qwUserCards = qwUserBackdrop ? qwUserBackdrop.querySelectorAll("[data-qw-user]") : [];
 const qwUserCancelBtn = document.getElementById("qwUserCancelBtn");
 
 const qwEditBackdrop = document.getElementById("qwEditBackdrop");
@@ -72,7 +72,7 @@ let currentUserColor = USER_COLORS.A;
 // QW state
 let currentQwUser = null;
 
-// build squares (ratings)
+// ===== BUILD RATING SQUARES =====
 function buildPentagons() {
   ratingPentagons.innerHTML = "";
   for (let i = 1; i <= 10; i++) {
@@ -104,14 +104,13 @@ function setSelectedRating(val) {
       sq.style.background = currentUserColor;
       sq.style.borderColor = currentUserColor;
     } else if (idx === whole + 1 && hasHalf) {
-      // "\" diagonal
       sq.style.background = `linear-gradient(45deg, ${currentUserColor} 50%, rgba(255,255,255,0.04) 50%)`;
       sq.style.borderColor = currentUserColor;
     }
   });
 }
 
-// fetch books
+// ===== FETCH BOOKS =====
 async function fetchBooks() {
   booksList.innerHTML = "<p class='empty-text'>Loading...</p>";
   try {
@@ -125,6 +124,7 @@ async function fetchBooks() {
   }
 }
 
+// ===== RENDER BOOK LIST =====
 function renderRatingRow(label, val, color) {
   const wrap = document.createElement("div");
   wrap.style.display = "flex";
@@ -150,9 +150,6 @@ function renderRatingRow(label, val, color) {
     } else if (i === whole && hasHalf) {
       d.style.background = `linear-gradient(45deg, ${color} 50%, rgba(255,255,255,0.04) 50%)`;
       d.style.borderColor = color;
-    } else {
-      d.style.background = "rgba(255,255,255,0.04)";
-      d.style.borderColor = "rgba(255,255,255,0.04)";
     }
     dots.appendChild(d);
   }
@@ -205,40 +202,7 @@ function renderBooks() {
   });
 }
 
-// add-book modal
-addBookBtn.addEventListener("click", () => {
-  bookModalBackdrop.classList.add("show");
-  document.getElementById("bookTitle").value = "";
-  document.getElementById("bookStatus").value = "To Read";
-  modalMsg.textContent = "";
-});
-bookModalBackdrop.addEventListener("click", (e) => {
-  if (e.target === bookModalBackdrop || e.target.matches("[data-close-book]")) {
-    bookModalBackdrop.classList.remove("show");
-  }
-});
-saveBookBtn.addEventListener("click", async () => {
-  const title = document.getElementById("bookTitle").value.trim();
-  const status = document.getElementById("bookStatus").value;
-  if (!title) {
-    modalMsg.textContent = "Title required.";
-    return;
-  }
-  try {
-    await fetch(`${API_BASE}/books`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, status }),
-    });
-    await fetchBooks();
-    bookModalBackdrop.classList.remove("show");
-  } catch (err) {
-    console.error(err);
-    modalMsg.textContent = "Error saving to backend.";
-  }
-});
-
-// rating flow
+// ===== RATING FLOW =====
 function openRateUserModal(bookIndex) {
   currentBookIndex = bookIndex;
   selectedUser = null;
@@ -271,32 +235,23 @@ rateUserCards.forEach((card) => {
   });
 });
 
-cancelRateUserBtn.addEventListener("click", () => {
+cancelRateUserBtn?.addEventListener("click", () => {
   rateUserBackdrop.classList.remove("show");
 });
-
-// NEW: close "Who is rating" when clicking outside
-rateUserBackdrop.addEventListener("click", (e) => {
-  if (e.target === rateUserBackdrop) {
-    rateUserBackdrop.classList.remove("show");
-  }
+rateUserBackdrop?.addEventListener("click", (e) => {
+  if (e.target === rateUserBackdrop) rateUserBackdrop.classList.remove("show");
 });
-
-ratingInput.addEventListener("change", () => {
+ratingInput?.addEventListener("change", () => {
   const val = Number(ratingInput.value);
   if (!Number.isNaN(val)) setSelectedRating(val);
 });
-
-cancelRateBtn.addEventListener("click", () => {
+cancelRateBtn?.addEventListener("click", () => {
   rateValueBackdrop.classList.remove("show");
 });
-rateValueBackdrop.addEventListener("click", (e) => {
-  if (e.target === rateValueBackdrop) {
-    rateValueBackdrop.classList.remove("show");
-  }
+rateValueBackdrop?.addEventListener("click", (e) => {
+  if (e.target === rateValueBackdrop) rateValueBackdrop.classList.remove("show");
 });
-
-okRateBtn.addEventListener("click", async () => {
+okRateBtn?.addEventListener("click", async () => {
   if (!selectedUser) {
     rateMsg.textContent = "Select user first.";
     return;
@@ -309,34 +264,26 @@ okRateBtn.addEventListener("click", async () => {
     });
     await fetchBooks();
     rateValueBackdrop.classList.remove("show");
-  } catch (err) {
-    console.error(err);
+  } catch {
     rateMsg.textContent = "Error saving rating.";
   }
 });
 
-// QW VIEW
+// ===== QW VIEW/EDIT =====
 function openQwModal(bookIndex) {
   currentBookIndex = bookIndex;
   const book = books[bookIndex];
   qwTitle.textContent = `Quotes & Words – ${book?.title || ""}`;
-
-  const qa = book?.quotes?.A || [];
-  const qn = book?.quotes?.N || [];
-  const wa = book?.words?.A || [];
-  const wn = book?.words?.N || [];
-
-  fillList(qwQuotesA, qa);
-  fillList(qwQuotesN, qn);
-  fillList(qwWordsA, wa);
-  fillList(qwWordsN, wn);
-
+  fillList(qwQuotesA, book?.quotes?.A || []);
+  fillList(qwQuotesN, book?.quotes?.N || []);
+  fillList(qwWordsA, book?.words?.A || []);
+  fillList(qwWordsN, book?.words?.N || []);
   qwBackdrop.classList.add("show");
 }
 
 function fillList(ul, arr) {
   ul.innerHTML = "";
-  if (!arr || !arr.length) {
+  if (!arr?.length) {
     const li = document.createElement("li");
     li.textContent = "— empty —";
     ul.appendChild(li);
@@ -349,50 +296,31 @@ function fillList(ul, arr) {
   });
 }
 
-qwCloseBtn.addEventListener("click", () => {
-  qwBackdrop.classList.remove("show");
-});
-qwBackdrop.addEventListener("click", (e) => {
-  if (e.target === qwBackdrop) {
-    qwBackdrop.classList.remove("show");
-  }
+qwCloseBtn?.addEventListener("click", () => qwBackdrop.classList.remove("show"));
+qwBackdrop?.addEventListener("click", (e) => {
+  if (e.target === qwBackdrop) qwBackdrop.classList.remove("show");
 });
 
-// QW edit flow
-qwEditBtn.addEventListener("click", () => {
-  qwUserBackdrop.classList.add("show");
+qwEditBtn?.addEventListener("click", () => qwUserBackdrop.classList.add("show"));
+qwUserCancelBtn?.addEventListener("click", () => qwUserBackdrop.classList.remove("show"));
+qwUserBackdrop?.addEventListener("click", (e) => {
+  if (e.target === qwUserBackdrop) qwUserBackdrop.classList.remove("show");
 });
 
-qwUserCancelBtn.addEventListener("click", () => {
-  qwUserBackdrop.classList.remove("show");
-});
-qwUserBackdrop.addEventListener("click", (e) => {
-  if (e.target === qwUserBackdrop) {
-    qwUserBackdrop.classList.remove("show");
-  }
-});
-
-qwEditCancelBtn.addEventListener("click", () => {
-  qwEditBackdrop.classList.remove("show");
-});
-qwEditBackdrop.addEventListener("click", (e) => {
-  if (e.target === qwEditBackdrop) {
-    qwEditBackdrop.classList.remove("show");
-  }
+qwEditCancelBtn?.addEventListener("click", () => qwEditBackdrop.classList.remove("show"));
+qwEditBackdrop?.addEventListener("click", (e) => {
+  if (e.target === qwEditBackdrop) qwEditBackdrop.classList.remove("show");
 });
 
 qwUserCards.forEach((card) => {
   card.addEventListener("click", () => {
     currentQwUser = card.dataset.qwUser;
     qwUserBackdrop.classList.remove("show");
-
     const book = books[currentBookIndex];
-    const existingQuotes = (book?.quotes && book.quotes[currentQwUser]) || [];
-    const existingWords = (book?.words && book.words[currentQwUser]) || [];
-
+    const existingQuotes = book?.quotes?.[currentQwUser] || [];
+    const existingWords = book?.words?.[currentQwUser] || [];
     buildQwInputs(qwQuotesInputs, 6, existingQuotes);
     buildQwInputs(qwWordsInputs, 9, existingWords);
-
     qwEditTitle.textContent = `Edit for ${currentQwUser} – ${book?.title || ""}`;
     qwEditMsg.textContent = "";
     qwEditBackdrop.classList.add("show");
@@ -409,32 +337,211 @@ function buildQwInputs(container, count, existing) {
   }
 }
 
-qwEditSaveBtn.addEventListener("click", async () => {
+qwEditSaveBtn?.addEventListener("click", async () => {
   const quoteInputs = Array.from(qwQuotesInputs.querySelectorAll("input"));
   const wordInputs = Array.from(qwWordsInputs.querySelectorAll("input"));
-  const quotes = quoteInputs.map((i) => i.value.trim()).filter((x) => x.length);
-  const words = wordInputs.map((i) => i.value.trim()).filter((x) => x.length);
-
+  const quotes = quoteInputs.map((i) => i.value.trim()).filter((x) => x);
+  const words = wordInputs.map((i) => i.value.trim()).filter((x) => x);
   try {
     await fetch(`${API_BASE}/books/${currentBookIndex}/qw`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user: currentQwUser,
-        quotes,
-        words,
-      }),
+      body: JSON.stringify({ user: currentQwUser, quotes, words }),
     });
     await fetchBooks();
     openQwModal(currentBookIndex);
     qwEditBackdrop.classList.remove("show");
-  } catch (err) {
-    console.error(err);
+  } catch {
     qwEditMsg.textContent = "Error saving.";
   }
 });
 
-// init
+// ===== INIT =====
 buildPentagons();
 setSelectedRating(5);
 fetchBooks();
+
+// ====================================================
+// === LIBRARIAN MODALS AND FUNCTIONS (new section) ===
+// ====================================================
+const librarianBackdrop = document.getElementById("librarianBackdrop");
+const burgerBtn = document.getElementById("burgerBtn");
+const libCloseBtn = document.getElementById("libCloseBtn");
+const libAddBtn = document.getElementById("libAddBtn");
+const libRemoveBtn = document.getElementById("libRemoveBtn");
+const libRenameBtn = document.getElementById("libRenameBtn");
+const libSortBtn = document.getElementById("libSortBtn");
+
+const addBooksBackdrop = document.getElementById("addBooksBackdrop");
+const addBooksTextarea = document.getElementById("addBooksTextarea");
+const addBooksCancel = document.getElementById("addBooksCancel");
+const addBooksSave = document.getElementById("addBooksSave");
+const addBooksMsg = document.getElementById("addBooksMsg");
+
+const removeBooksBackdrop = document.getElementById("removeBooksBackdrop");
+const removeBooksInput = document.getElementById("removeBooksInput");
+const removeBooksCancel = document.getElementById("removeBooksCancel");
+const removeBooksNext = document.getElementById("removeBooksNext");
+const removeBooksMsg = document.getElementById("removeBooksMsg");
+
+const confirmDeleteBackdrop = document.getElementById("confirmDeleteBackdrop");
+const confirmDeleteList = document.getElementById("confirmDeleteList");
+const confirmDeleteCancel = document.getElementById("confirmDeleteCancel");
+const confirmDeleteConfirm = document.getElementById("confirmDeleteConfirm");
+
+const renameBackdrop = document.getElementById("renameBackdrop");
+const renameNumber = document.getElementById("renameNumber");
+const renameLoadBtn = document.getElementById("renameLoadBtn");
+const renameEditSection = document.getElementById("renameEditSection");
+const renameCurrentTitle = document.getElementById("renameCurrentTitle");
+const renameNewTitle = document.getElementById("renameNewTitle");
+const renameSaveBtn = document.getElementById("renameSaveBtn");
+const renameCancelBtn = document.getElementById("renameCancelBtn");
+const renameMsg = document.getElementById("renameMsg");
+
+const sortBackdrop = document.getElementById("sortBackdrop");
+const sortCloseBtn = document.getElementById("sortCloseBtn");
+
+// === Open Librarian ===
+burgerBtn.addEventListener("click", () => librarianBackdrop.classList.add("show"));
+libCloseBtn.addEventListener("click", () => librarianBackdrop.classList.remove("show"));
+librarianBackdrop.addEventListener("click", (e) => {
+  if (e.target === librarianBackdrop) librarianBackdrop.classList.remove("show");
+});
+
+// === Add Books ===
+libAddBtn.addEventListener("click", () => {
+  librarianBackdrop.classList.remove("show");
+  addBooksBackdrop.classList.add("show");
+  addBooksTextarea.value = "";
+  addBooksMsg.textContent = "";
+});
+addBooksCancel.addEventListener("click", () => addBooksBackdrop.classList.remove("show"));
+addBooksBackdrop.addEventListener("click", (e) => {
+  if (e.target === addBooksBackdrop) addBooksBackdrop.classList.remove("show");
+});
+addBooksSave.addEventListener("click", async () => {
+  const lines = addBooksTextarea.value
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l.length);
+  if (!lines.length) {
+    addBooksMsg.textContent = "No valid titles entered.";
+    return;
+  }
+  try {
+    await fetch(`${API_BASE}/books/bulk-add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ titles: lines }),
+    });
+    await fetchBooks();
+    addBooksBackdrop.classList.remove("show");
+  } catch {
+    addBooksMsg.textContent = "Error adding books.";
+  }
+});
+
+// === Remove Books ===
+libRemoveBtn.addEventListener("click", () => {
+  librarianBackdrop.classList.remove("show");
+  removeBooksBackdrop.classList.add("show");
+  removeBooksInput.value = "";
+  removeBooksMsg.textContent = "";
+});
+removeBooksCancel.addEventListener("click", () => removeBooksBackdrop.classList.remove("show"));
+removeBooksBackdrop.addEventListener("click", (e) => {
+  if (e.target === removeBooksBackdrop) removeBooksBackdrop.classList.remove("show");
+});
+removeBooksNext.addEventListener("click", () => {
+  const nums = removeBooksInput.value
+    .split(",")
+    .map((n) => parseInt(n.trim(), 10))
+    .filter((n) => !isNaN(n));
+  if (!nums.length) {
+    removeBooksMsg.textContent = "Enter valid numbers.";
+    return;
+  }
+  confirmDeleteList.innerHTML = "";
+  nums.forEach((n) => {
+    const b = books[n - 1];
+    const li = document.createElement("li");
+    li.textContent = b ? `${n}. ${b.title}` : `${n}. (not found)`;
+    confirmDeleteList.appendChild(li);
+  });
+  removeBooksBackdrop.classList.remove("show");
+  confirmDeleteBackdrop.classList.add("show");
+  confirmDeleteConfirm.dataset.nums = JSON.stringify(nums);
+});
+confirmDeleteCancel.addEventListener("click", () => confirmDeleteBackdrop.classList.remove("show"));
+confirmDeleteBackdrop.addEventListener("click", (e) => {
+  if (e.target === confirmDeleteBackdrop) confirmDeleteBackdrop.classList.remove("show");
+});
+confirmDeleteConfirm.addEventListener("click", async () => {
+  const nums = JSON.parse(confirmDeleteConfirm.dataset.nums || "[]");
+  try {
+    await fetch(`${API_BASE}/books/bulk-remove`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ indexes: nums }),
+    });
+    await fetchBooks();
+    confirmDeleteBackdrop.classList.remove("show");
+  } catch {
+    alert("Error deleting books.");
+  }
+});
+
+// === Rename ===
+libRenameBtn.addEventListener("click", () => {
+  librarianBackdrop.classList.remove("show");
+  renameBackdrop.classList.add("show");
+  renameEditSection.style.display = "none";
+  renameMsg.textContent = "";
+  renameNumber.value = "";
+  renameNewTitle.value = "";
+});
+renameBackdrop.addEventListener("click", (e) => {
+  if (e.target === renameBackdrop) renameBackdrop.classList.remove("show");
+});
+renameLoadBtn.addEventListener("click", () => {
+  const num = parseInt(renameNumber.value, 10);
+  if (isNaN(num) || num < 1 || num > books.length) {
+    renameMsg.textContent = "Invalid book number.";
+    renameEditSection.style.display = "none";
+    return;
+  }
+  const book = books[num - 1];
+  renameCurrentTitle.textContent = `Current title: ${book.title}`;
+  renameEditSection.style.display = "block";
+});
+renameCancelBtn.addEventListener("click", () => renameBackdrop.classList.remove("show"));
+renameSaveBtn.addEventListener("click", async () => {
+  const num = parseInt(renameNumber.value, 10);
+  const newTitle = renameNewTitle.value.trim();
+  if (!newTitle) {
+    renameMsg.textContent = "Enter new title.";
+    return;
+  }
+  try {
+    await fetch(`${API_BASE}/books/rename`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ index: num - 1, newTitle }),
+    });
+    await fetchBooks();
+    renameBackdrop.classList.remove("show");
+  } catch {
+    renameMsg.textContent = "Error renaming.";
+  }
+});
+
+// === Sort Placeholder ===
+libSortBtn.addEventListener("click", () => {
+  librarianBackdrop.classList.remove("show");
+  sortBackdrop.classList.add("show");
+});
+sortCloseBtn.addEventListener("click", () => sortBackdrop.classList.remove("show"));
+sortBackdrop.addEventListener("click", (e) => {
+  if (e.target === sortBackdrop) sortBackdrop.classList.remove("show");
+});

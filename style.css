@@ -22,11 +22,13 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 32px 18px 60px;
+  position: relative;
 }
 
 .topbar {
   text-align: center;
   margin-bottom: 30px;
+  position: relative;
 }
 
 .title {
@@ -102,7 +104,7 @@ body {
   border-radius: 26px;
   padding: 18px 20px;
   display: grid;
-  grid-template-columns: 60px 2fr 230px 90px; /* ratings, then Q */
+  grid-template-columns: 60px 2fr 230px 90px;
   gap: 10px;
   align-items: center;
 }
@@ -121,7 +123,7 @@ body {
   font-weight: 500;
 }
 
-/* quotes button in row */
+/* quotes button */
 .quotes-btn {
   width: 58px;
   height: 48px;
@@ -141,7 +143,7 @@ body {
   color: var(--muted);
 }
 
-/* MODALS */
+/* =============== MODALS =============== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -165,6 +167,7 @@ body {
   max-width: 420px;
 }
 
+/* Large modals */
 .modal-huge {
   max-width: 40vw;
   width: 40vw;
@@ -177,14 +180,7 @@ body {
   text-align: center;
 }
 
-.modal-top-note {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.65);
-  width: 100%;
-  text-align: center;
-  margin-bottom: 4px;
-}
-
+/* Rating modals */
 .modal-rate {
   width: 46vw;
   max-width: 800px;
@@ -333,7 +329,7 @@ input[type="number"] {
   color: #0f1534;
 }
 
-/* QW VIEW MODAL */
+/* Quotes/Words view and edit */
 .modal-qw {
   width: 70vw;
   max-width: 1000px;
@@ -379,7 +375,6 @@ input[type="number"] {
   margin-bottom: 4px;
 }
 
-/* QW EDIT MODAL */
 .modal-qw-edit {
   width: 55vw;
   max-width: 900px;
@@ -405,7 +400,7 @@ input[type="number"] {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* small rating squares in list */
+/* small rating squares */
 .rating-small-square {
   width: 12px;
   height: 12px;
@@ -419,6 +414,91 @@ input[type="number"] {
   text-align: center;
   color: var(--muted);
   font-size: 0.8rem;
+}
+
+/* ========================= */
+/* ==== NEW LIBRARIAN ====== */
+/* ========================= */
+
+/* Burger icon */
+.burger-btn {
+  position: absolute;
+  top: 28px;
+  right: 26px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.burger-btn:hover {
+  opacity: 0.8;
+}
+
+/* Librarian modal */
+.modal-librarian {
+  max-width: 480px;
+  text-align: center;
+}
+.librarian-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 18px 0;
+}
+.librarian-btn {
+  height: 100px;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s;
+}
+.add-btn-lite {
+  border-color: #f3cfa7;
+  color: #f3cfa7;
+}
+.remove-btn-lite {
+  border-color: #f87171;
+  color: #f87171;
+}
+.rename-btn-lite {
+  border-color: #4cc9f0;
+  color: #4cc9f0;
+}
+.sort-btn-lite {
+  border-color: #b0b6ca;
+  color: #b0b6ca;
+}
+.librarian-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Add Books modal */
+.modal-add-books textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  padding: 10px;
+  resize: none;
+  font-family: inherit;
+}
+
+/* Remove / Confirm / Rename */
+.modal-remove-books input,
+.modal-rename input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  padding: 8px 10px;
+  font-size: 1rem;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 950px) {
