@@ -20,10 +20,7 @@ tabs.forEach((tab) => {
 
 // ===== BOOK DOM =====
 const booksList = document.getElementById("booksList");
-const addBookBtn = document.getElementById("addBookBtn"); // no longer visible
-const bookModalBackdrop = document.getElementById("bookModalBackdrop");
-const saveBookBtn = document.getElementById("saveBook");
-const modalMsg = document.getElementById("modalMsg");
+
 
 // ===== RATING DOM =====
 const rateUserBackdrop = document.getElementById("rateUserBackdrop");
