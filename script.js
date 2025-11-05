@@ -11,7 +11,6 @@ const panels = {
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     tabs.forEach((t) => t.classList.remove("active"));
-    tab.addEventListener;
     tab.classList.add("active");
     const target = tab.dataset.tab;
     Object.values(panels).forEach((p) => p.classList.remove("active"));
@@ -274,6 +273,13 @@ rateUserCards.forEach((card) => {
 
 cancelRateUserBtn.addEventListener("click", () => {
   rateUserBackdrop.classList.remove("show");
+});
+
+// NEW: close "Who is rating" when clicking outside
+rateUserBackdrop.addEventListener("click", (e) => {
+  if (e.target === rateUserBackdrop) {
+    rateUserBackdrop.classList.remove("show");
+  }
 });
 
 ratingInput.addEventListener("change", () => {
