@@ -39,6 +39,7 @@ const cancelRateBtn = document.getElementById("cancelRateBtn");
 const okRateBtn = document.getElementById("okRateBtn");
 const rateMsg = document.getElementById("rateMsg");
 const rateForUser = document.getElementById("rateForUser");
+const rateModalTitle = document.getElementById("rateModalTitle");
 
 let books = [];
 
@@ -55,8 +56,13 @@ function buildPentagons() {
     const p = document.createElement("div");
     p.className = "rating-square";
     p.dataset.index = i;
+    // single click -> full number
     p.addEventListener("click", () => {
       setSelectedRating(i);
+    });
+    // double click -> number - 0.5
+    p.addEventListener("dblclick", () => {
+      setSelectedRating(i - 0.5);
     });
     ratingPentagons.appendChild(p);
   }
@@ -76,17 +82,13 @@ function setSelectedRating(val) {
   const shapes = ratingPentagons.querySelectorAll(".rating-square");
   shapes.forEach((p) => {
     const idx = Number(p.dataset.index);
-    p.classList.remove("filled", "half");
-    // reset
     p.style.background = "rgba(255,255,255,0.04)";
     p.style.borderColor = "rgba(255,255,255,0.25)";
 
     if (idx <= whole) {
-      // fully filled
       p.style.background = currentUserColor;
       p.style.borderColor = currentUserColor;
     } else if (idx === whole + 1 && hasHalf) {
-      // half filled, lower-left triangle
       p.style.background = `linear-gradient(135deg, ${currentUserColor} 50%, rgba(255,255,255,0.04) 50%)`;
       p.style.borderColor = currentUserColor;
     }
@@ -244,7 +246,6 @@ function openRateUserModal(bookIndex) {
   selectedUser = null;
   rateUserMsg.textContent = "";
   rateUserCards.forEach((c) => c.classList.remove("active"));
-  // set actual book title
   rateUserBookTitle.textContent = books[bookIndex]?.title || "Book";
   rateUserBackdrop.classList.add("show");
 }
@@ -258,7 +259,14 @@ rateUserCards.forEach((card) => {
     rateUserBackdrop.classList.remove("show");
 
     rateForUser.textContent = `Rating for: ${selectedUser}`;
-    rateMsg.textContent = "";
+
+    // dynamic heading with actual title
+    const btitle = books[currentBookIndex]?.title || "this book";
+    rateModalTitle.innerHTML = `Rate this book <i>(${btitle})</i>`;
+
+    // color OK button
+    okRateBtn.style.background = currentUserColor;
+    okRateBtn.style.color = selectedUser === "N" ? "#0f1534" : "#111827";
 
     // read existing value for this user/book
     const currentBook = books[currentBookIndex];

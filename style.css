@@ -159,6 +159,18 @@ body {
   max-width: 420px;
 }
 
+/* rating modal: 60% width, 40% height, centered content */
+.modal-rate {
+  width: 60vw;
+  max-width: 60vw;
+  height: 40vh;
+  min-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
 .modal-wide {
   max-width: 40vw;
   width: 40vw;
@@ -216,10 +228,14 @@ input[type="number"] {
 
 .modal-actions {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 10px;
   margin-top: 18px;
   width: 100%;
+}
+
+.modal-actions-left {
+  justify-content: flex-start;
 }
 
 .btn-secondary,
@@ -331,13 +347,6 @@ input[type="number"] {
   transition: 0.15s ease;
 }
 
-.footer {
-  margin-top: 36px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-
 /* small rating squares in list */
 .rating-small-square {
   width: 12px;
@@ -347,10 +356,18 @@ input[type="number"] {
   background: rgba(255, 255, 255, 0.04);
 }
 
+.footer {
+  margin-top: 36px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 @media (max-width: 950px) {
   .book-row {
     grid-template-columns: 1fr;
   }
+  .modal-rate,
   .modal-wide,
   .modal-huge {
     max-width: 95vw;
