@@ -1,11 +1,11 @@
 {
   "name": "book-tracker",
   "version": "1.0.0",
-  "description": "Root package to run backend/server.js with frontend/ + backend/ structure",
+  "description": "Root package to run backend/server.js with frontend/backend structure",
   "type": "module",
-  "main": "backend/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
