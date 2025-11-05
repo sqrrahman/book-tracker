@@ -57,6 +57,7 @@ export function initRating({ getBooks, refreshBooks }) {
     if (!Number.isNaN(val)) setSelectedRating(val);
   });
 
+  // Enter = save
   ratingInput?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -118,6 +119,7 @@ export function openRateUserModal(bookIndex) {
   currentBookIndex = bookIndex;
   selectedUser = null;
   rateUserCards.forEach((c) => c.classList.remove("active"));
+
   const books = getBooksFn ? getBooksFn() : [];
   rateUserBookTitle.textContent = books[bookIndex]?.title || "Book";
   rateUserBackdrop.classList.add("show");
