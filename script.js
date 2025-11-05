@@ -21,7 +21,6 @@ tabs.forEach((tab) => {
 // ===== BOOK DOM =====
 const booksList = document.getElementById("booksList");
 
-
 // ===== RATING DOM =====
 const rateUserBackdrop = document.getElementById("rateUserBackdrop");
 const rateUserCards = rateUserBackdrop ? rateUserBackdrop.querySelectorAll(".user-card") : [];
@@ -71,6 +70,7 @@ let currentQwUser = null;
 
 // ===== BUILD RATING SQUARES =====
 function buildPentagons() {
+  if (!ratingPentagons) return; // <- guard
   ratingPentagons.innerHTML = "";
   for (let i = 1; i <= 10; i++) {
     const sq = document.createElement("div");
@@ -83,12 +83,14 @@ function buildPentagons() {
 }
 
 function setSelectedRating(val) {
+  if (!ratingInput) return; // no rating UI present
   let v = Math.round(val * 2) / 2;
   if (v < 0) v = 0;
   if (v > 10) v = 10;
   selectedRating = v;
   ratingInput.value = v;
 
+  if (!ratingPentagons) return; // guard
   const whole = Math.floor(v);
   const hasHalf = v - whole === 0.5;
 
@@ -201,6 +203,8 @@ function renderBooks() {
 
 // ===== RATING FLOW =====
 function openRateUserModal(bookIndex) {
+  // if rating UI isn't on this page, just do nothing
+  if (!rateUserBackdrop) return;
   currentBookIndex = bookIndex;
   selectedUser = null;
   rateUserCards.forEach((c) => c.classList.remove("active"));
@@ -216,6 +220,8 @@ rateUserCards.forEach((card) => {
     card.classList.add("active");
     rateUserBackdrop.classList.remove("show");
 
+    if (!rateForUser || !rateModalTitle || !okRateBtn) return;
+
     rateForUser.textContent = `Rating for: ${selectedUser}`;
     rateModalTitle.innerHTML = `Rate this book <i>(${books[currentBookIndex]?.title || "this book"})</i>`;
     okRateBtn.style.background = currentUserColor;
@@ -228,7 +234,7 @@ rateUserCards.forEach((card) => {
         : 0;
 
     setSelectedRating(existing);
-    rateValueBackdrop.classList.add("show");
+    if (rateValueBackdrop) rateValueBackdrop.classList.add("show");
   });
 });
 
@@ -250,7 +256,7 @@ rateValueBackdrop?.addEventListener("click", (e) => {
 });
 okRateBtn?.addEventListener("click", async () => {
   if (!selectedUser) {
-    rateMsg.textContent = "Select user first.";
+    if (rateMsg) rateMsg.textContent = "Select user first.";
     return;
   }
   try {
@@ -262,12 +268,13 @@ okRateBtn?.addEventListener("click", async () => {
     await fetchBooks();
     rateValueBackdrop.classList.remove("show");
   } catch {
-    rateMsg.textContent = "Error saving rating.";
+    if (rateMsg) rateMsg.textContent = "Error saving rating.";
   }
 });
 
 // ===== QW VIEW/EDIT =====
 function openQwModal(bookIndex) {
+  if (!qwBackdrop) return;
   currentBookIndex = bookIndex;
   const book = books[bookIndex];
   qwTitle.textContent = `Quotes & Words – ${book?.title || ""}`;
@@ -279,6 +286,7 @@ function openQwModal(bookIndex) {
 }
 
 function fillList(ul, arr) {
+  if (!ul) return;
   ul.innerHTML = "";
   if (!arr?.length) {
     const li = document.createElement("li");
@@ -298,7 +306,7 @@ qwBackdrop?.addEventListener("click", (e) => {
   if (e.target === qwBackdrop) qwBackdrop.classList.remove("show");
 });
 
-qwEditBtn?.addEventListener("click", () => qwUserBackdrop.classList.add("show"));
+qwEditBtn?.addEventListener("click", () => qwUserBackdrop?.classList.add("show"));
 qwUserCancelBtn?.addEventListener("click", () => qwUserBackdrop.classList.remove("show"));
 qwUserBackdrop?.addEventListener("click", (e) => {
   if (e.target === qwUserBackdrop) qwUserBackdrop.classList.remove("show");
@@ -318,13 +326,16 @@ qwUserCards.forEach((card) => {
     const existingWords = book?.words?.[currentQwUser] || [];
     buildQwInputs(qwQuotesInputs, 6, existingQuotes);
     buildQwInputs(qwWordsInputs, 9, existingWords);
-    qwEditTitle.textContent = `Edit for ${currentQwUser} – ${book?.title || ""}`;
-    qwEditMsg.textContent = "";
+    if (qwEditTitle) {
+      qwEditTitle.textContent = `Edit for ${currentQwUser} – ${book?.title || ""}`;
+    }
+    if (qwEditMsg) qwEditMsg.textContent = "";
     qwEditBackdrop.classList.add("show");
   });
 });
 
 function buildQwInputs(container, count, existing) {
+  if (!container) return;
   container.innerHTML = "";
   for (let i = 0; i < count; i++) {
     const inp = document.createElement("input");
@@ -335,6 +346,7 @@ function buildQwInputs(container, count, existing) {
 }
 
 qwEditSaveBtn?.addEventListener("click", async () => {
+  if (!qwQuotesInputs || !qwWordsInputs) return;
   const quoteInputs = Array.from(qwQuotesInputs.querySelectorAll("input"));
   const wordInputs = Array.from(qwWordsInputs.querySelectorAll("input"));
   const quotes = quoteInputs.map((i) => i.value.trim()).filter((x) => x);
@@ -349,13 +361,15 @@ qwEditSaveBtn?.addEventListener("click", async () => {
     openQwModal(currentBookIndex);
     qwEditBackdrop.classList.remove("show");
   } catch {
-    qwEditMsg.textContent = "Error saving.";
+    if (qwEditMsg) qwEditMsg.textContent = "Error saving.";
   }
 });
 
 // ===== INIT =====
-buildPentagons();
-setSelectedRating(5);
+if (ratingPentagons) {
+  buildPentagons();
+  setSelectedRating(5);
+}
 fetchBooks();
 
 // ====================================================
