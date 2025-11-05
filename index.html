@@ -21,15 +21,17 @@
         <button class="add-btn" id="addBookBtn">+ Add Book</button>
       </div>
 
+      <!-- BOOKS PANEL -->
       <section class="panel active" id="booksPanel">
         <div class="books-list" id="booksList"></div>
       </section>
 
+      <!-- QUOTES PANEL -->
       <section class="panel" id="quotesPanel">
         <p class="empty-text">Quotes not connected to backend yet.</p>
       </section>
 
-      <!-- add-book modal -->
+      <!-- Add Book Modal -->
       <div class="modal-backdrop" id="bookModalBackdrop">
         <div class="modal">
           <h2>Add a book</h2>
@@ -53,7 +55,7 @@
         </div>
       </div>
 
-      <!-- who is rating -->
+      <!-- Who is rating modal -->
       <div class="modal-backdrop" id="rateUserBackdrop">
         <div class="modal modal-huge" id="rateUserModal">
           <p class="modal-top-note" id="rateUserBookTitle">the corresponding book title</p>
@@ -70,7 +72,7 @@
         </div>
       </div>
 
-      <!-- rate -->
+      <!-- Rating modal -->
       <div class="modal-backdrop" id="rateValueBackdrop">
         <div class="modal modal-rate" id="rateModal">
           <h2 id="rateModalTitle">Rate this book</h2>
@@ -98,6 +100,69 @@
           </div>
 
           <p id="rateMsg" class="small-msg"></p>
+        </div>
+      </div>
+
+      <!-- QW VIEW MODAL -->
+      <div class="modal-backdrop" id="qwBackdrop">
+        <div class="modal modal-qw" id="qwModal">
+          <h2 id="qwTitle">Quotes & Words</h2>
+          <div class="qw-grid">
+            <div class="qw-box qw-quotes-a">
+              <h3>A – Quotes</h3>
+              <ul id="qwQuotesA" class="qw-list"></ul>
+            </div>
+            <div class="qw-box qw-quotes-n">
+              <h3>N – Quotes</h3>
+              <ul id="qwQuotesN" class="qw-list"></ul>
+            </div>
+            <div class="qw-box qw-words-a">
+              <h3>A – Words</h3>
+              <ul id="qwWordsA" class="qw-list qw-words-list"></ul>
+            </div>
+            <div class="qw-box qw-words-n">
+              <h3>N – Words</h3>
+              <ul id="qwWordsN" class="qw-list qw-words-list"></ul>
+            </div>
+          </div>
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="qwEditBtn">Edit</button>
+            <button class="btn-primary" id="qwCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- QW USER PICK MODAL -->
+      <div class="modal-backdrop" id="qwUserBackdrop">
+        <div class="modal modal-huge" id="qwUserModal">
+          <h2>Select user</h2>
+          <p class="small-muted">Pick A or N to edit their quotes/words</p>
+          <div class="user-card-row user-card-row-big">
+            <div class="user-card user-card-big" data-qw-user="A">A</div>
+            <div class="user-card user-card-big" data-qw-user="N">N</div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="qwUserCancelBtn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- QW EDIT MODAL -->
+      <div class="modal-backdrop" id="qwEditBackdrop">
+        <div class="modal modal-qw-edit" id="qwEditModal">
+          <h2 id="qwEditTitle">Edit quotes/words</h2>
+
+          <p class="small-muted">Quotes (max 6)</p>
+          <div class="qw-input-grid" id="qwQuotesInputs"></div>
+
+          <p class="small-muted">Words / phrases (max 9)</p>
+          <div class="qw-input-grid qw-words-grid" id="qwWordsInputs"></div>
+
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="qwEditCancelBtn">Cancel</button>
+            <button class="btn-primary" id="qwEditSaveBtn">Okay</button>
+          </div>
+          <p id="qwEditMsg" class="small-msg"></p>
         </div>
       </div>
 

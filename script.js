@@ -18,13 +18,14 @@ tabs.forEach((tab) => {
   });
 });
 
-// DOM
+// book DOM
 const booksList = document.getElementById("booksList");
 const addBookBtn = document.getElementById("addBookBtn");
 const bookModalBackdrop = document.getElementById("bookModalBackdrop");
 const saveBookBtn = document.getElementById("saveBook");
 const modalMsg = document.getElementById("modalMsg");
 
+// rating flow DOM
 const rateUserBackdrop = document.getElementById("rateUserBackdrop");
 const rateUserCards = rateUserBackdrop.querySelectorAll(".user-card");
 const cancelRateUserBtn = document.getElementById("cancelRateUserBtn");
@@ -39,13 +40,39 @@ const rateMsg = document.getElementById("rateMsg");
 const rateForUser = document.getElementById("rateForUser");
 const rateModalTitle = document.getElementById("rateModalTitle");
 
+// QW DOM
+const qwBackdrop = document.getElementById("qwBackdrop");
+const qwTitle = document.getElementById("qwTitle");
+const qwQuotesA = document.getElementById("qwQuotesA");
+const qwQuotesN = document.getElementById("qwQuotesN");
+const qwWordsA = document.getElementById("qwWordsA");
+const qwWordsN = document.getElementById("qwWordsN");
+const qwEditBtn = document.getElementById("qwEditBtn");
+const qwCloseBtn = document.getElementById("qwCloseBtn");
+
+const qwUserBackdrop = document.getElementById("qwUserBackdrop");
+const qwUserCards = qwUserBackdrop.querySelectorAll("[data-qw-user]");
+const qwUserCancelBtn = document.getElementById("qwUserCancelBtn");
+
+const qwEditBackdrop = document.getElementById("qwEditBackdrop");
+const qwEditTitle = document.getElementById("qwEditTitle");
+const qwQuotesInputs = document.getElementById("qwQuotesInputs");
+const qwWordsInputs = document.getElementById("qwWordsInputs");
+const qwEditCancelBtn = document.getElementById("qwEditCancelBtn");
+const qwEditSaveBtn = document.getElementById("qwEditSaveBtn");
+const qwEditMsg = document.getElementById("qwEditMsg");
+
 let books = [];
+
 let currentBookIndex = null;
 let selectedUser = null;
 let selectedRating = 5;
 let currentUserColor = USER_COLORS.A;
 
-// build 10 squares
+// QW state
+let currentQwUser = null;
+
+// build squares (ratings)
 function buildPentagons() {
   ratingPentagons.innerHTML = "";
   for (let i = 1; i <= 10; i++) {
@@ -59,7 +86,6 @@ function buildPentagons() {
 }
 
 function setSelectedRating(val) {
-  // round to nearest 0.5
   let v = Math.round(val * 2) / 2;
   if (v < 0) v = 0;
   if (v > 10) v = 10;
@@ -78,7 +104,7 @@ function setSelectedRating(val) {
       sq.style.background = currentUserColor;
       sq.style.borderColor = currentUserColor;
     } else if (idx === whole + 1 && hasHalf) {
-      // "\" diagonal = 45deg
+      // "\" diagonal
       sq.style.background = `linear-gradient(45deg, ${currentUserColor} 50%, rgba(255,255,255,0.04) 50%)`;
       sq.style.borderColor = currentUserColor;
     }
@@ -104,11 +130,9 @@ function renderRatingRow(label, val, color) {
   wrap.style.display = "flex";
   wrap.style.gap = "10px";
   wrap.style.alignItems = "center";
-
   const lbl = document.createElement("span");
   lbl.textContent = label + ":";
   lbl.style.color = color;
-
   const dots = document.createElement("div");
   dots.style.display = "flex";
   dots.style.gap = "4px";
@@ -126,10 +150,12 @@ function renderRatingRow(label, val, color) {
     } else if (i === whole && hasHalf) {
       d.style.background = `linear-gradient(45deg, ${color} 50%, rgba(255,255,255,0.04) 50%)`;
       d.style.borderColor = color;
+    } else {
+      d.style.background = "rgba(255,255,255,0.04)";
+      d.style.borderColor = "rgba(255,255,255,0.04)";
     }
     dots.appendChild(d);
   }
-
   wrap.appendChild(lbl);
   wrap.appendChild(dots);
   return wrap;
@@ -154,26 +180,10 @@ function renderBooks() {
     title.className = "book-title";
     title.textContent = book.title;
 
-    const statusSelect = document.createElement("select");
-    statusSelect.className = "status-select";
-    ["To Read", "Reading", "Completed"].forEach((opt) => {
-      const o = document.createElement("option");
-      o.value = opt;
-      o.textContent = opt;
-      if ((book.status || "To Read") === opt) o.selected = true;
-      statusSelect.appendChild(o);
-    });
-    statusSelect.addEventListener("change", async (e) => {
-      try {
-        await fetch(`${API_BASE}/books/${idx}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: e.target.value }),
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    });
+    const quotesBtn = document.createElement("button");
+    quotesBtn.className = "quotes-btn";
+    quotesBtn.textContent = "Q";
+    quotesBtn.addEventListener("click", () => openQwModal(idx));
 
     const ratingBlock = document.createElement("div");
     ratingBlock.style.display = "flex";
@@ -181,14 +191,16 @@ function renderBooks() {
     ratingBlock.style.gap = "4px";
     ratingBlock.style.cursor = "pointer";
 
-    ratingBlock.appendChild(renderRatingRow("A", book.ratings?.A ?? 0, USER_COLORS.A));
-    ratingBlock.appendChild(renderRatingRow("N", book.ratings?.N ?? 0, USER_COLORS.N));
+    const rA = book.ratings?.A ?? 0;
+    const rN = book.ratings?.N ?? 0;
+    ratingBlock.appendChild(renderRatingRow("A", rA, USER_COLORS.A));
+    ratingBlock.appendChild(renderRatingRow("N", rN, USER_COLORS.N));
 
     ratingBlock.ondblclick = () => openRateUserModal(idx);
 
     row.appendChild(index);
     row.appendChild(title);
-    row.appendChild(statusSelect);
+    row.appendChild(quotesBtn);
     row.appendChild(ratingBlock);
     booksList.appendChild(row);
   });
@@ -231,6 +243,7 @@ saveBookBtn.addEventListener("click", async () => {
 function openRateUserModal(bookIndex) {
   currentBookIndex = bookIndex;
   selectedUser = null;
+  rateUserCards.forEach((c) => c.classList.remove("active"));
   rateUserBookTitle.textContent = books[bookIndex]?.title || "Book";
   rateUserBackdrop.classList.add("show");
 }
@@ -239,18 +252,22 @@ rateUserCards.forEach((card) => {
   card.addEventListener("click", () => {
     selectedUser = card.dataset.user;
     currentUserColor = USER_COLORS[selectedUser];
+    rateUserCards.forEach((c) => c.classList.remove("active"));
+    card.classList.add("active");
     rateUserBackdrop.classList.remove("show");
 
     rateForUser.textContent = `Rating for: ${selectedUser}`;
     rateModalTitle.innerHTML = `Rate this book <i>(${books[currentBookIndex]?.title || "this book"})</i>`;
-
     okRateBtn.style.background = currentUserColor;
     okRateBtn.style.color = selectedUser === "N" ? "#0f1534" : "#111827";
 
-    const bk = books[currentBookIndex];
-    const existing = bk && bk.ratings && bk.ratings[selectedUser] != null ? bk.ratings[selectedUser] : 0;
-    setSelectedRating(existing);
+    const currentBook = books[currentBookIndex];
+    const existing =
+      currentBook && currentBook.ratings && currentBook.ratings[selectedUser] != null
+        ? currentBook.ratings[selectedUser]
+        : 0;
 
+    setSelectedRating(existing);
     rateValueBackdrop.classList.add("show");
   });
 });
@@ -259,16 +276,16 @@ cancelRateUserBtn.addEventListener("click", () => {
   rateUserBackdrop.classList.remove("show");
 });
 
-// IMPORTANT: use change, not input
 ratingInput.addEventListener("change", () => {
-  const v = Number(ratingInput.value);
-  if (!Number.isNaN(v)) setSelectedRating(v);
+  const val = Number(ratingInput.value);
+  if (!Number.isNaN(val)) setSelectedRating(val);
 });
 
 cancelRateBtn.addEventListener("click", () => {
   rateValueBackdrop.classList.remove("show");
 });
 
+// close rating if outside
 rateValueBackdrop.addEventListener("click", (e) => {
   if (e.target === rateValueBackdrop) {
     rateValueBackdrop.classList.remove("show");
@@ -276,6 +293,10 @@ rateValueBackdrop.addEventListener("click", (e) => {
 });
 
 okRateBtn.addEventListener("click", async () => {
+  if (!selectedUser) {
+    rateMsg.textContent = "Select user first.";
+    return;
+  }
   try {
     await fetch(`${API_BASE}/books/${currentBookIndex}/rating`, {
       method: "PUT",
@@ -287,6 +308,126 @@ okRateBtn.addEventListener("click", async () => {
   } catch (err) {
     console.error(err);
     rateMsg.textContent = "Error saving rating.";
+  }
+});
+
+// QW VIEW
+function openQwModal(bookIndex) {
+  currentBookIndex = bookIndex;
+  const book = books[bookIndex];
+  qwTitle.textContent = `Quotes & Words – ${book?.title || ""}`;
+
+  const qa = book?.quotes?.A || [];
+  const qn = book?.quotes?.N || [];
+  const wa = book?.words?.A || [];
+  const wn = book?.words?.N || [];
+
+  fillList(qwQuotesA, qa);
+  fillList(qwQuotesN, qn);
+  fillList(qwWordsA, wa);
+  fillList(qwWordsN, wn);
+
+  qwBackdrop.classList.add("show");
+}
+
+function fillList(ul, arr) {
+  ul.innerHTML = "";
+  if (!arr || !arr.length) {
+    const li = document.createElement("li");
+    li.textContent = "— empty —";
+    ul.appendChild(li);
+    return;
+  }
+  arr.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    ul.appendChild(li);
+  });
+}
+
+qwCloseBtn.addEventListener("click", () => {
+  qwBackdrop.classList.remove("show");
+});
+qwBackdrop.addEventListener("click", (e) => {
+  if (e.target === qwBackdrop) {
+    qwBackdrop.classList.remove("show");
+  }
+});
+
+// QW edit flow
+qwEditBtn.addEventListener("click", () => {
+  qwUserBackdrop.classList.add("show");
+});
+
+qwUserCancelBtn.addEventListener("click", () => {
+  qwUserBackdrop.classList.remove("show");
+});
+qwUserBackdrop.addEventListener("click", (e) => {
+  if (e.target === qwUserBackdrop) {
+    qwUserBackdrop.classList.remove("show");
+  }
+});
+
+qwEditCancelBtn.addEventListener("click", () => {
+  qwEditBackdrop.classList.remove("show");
+});
+qwEditBackdrop.addEventListener("click", (e) => {
+  if (e.target === qwEditBackdrop) {
+    qwEditBackdrop.classList.remove("show");
+  }
+});
+
+qwUserCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    currentQwUser = card.dataset.qwUser;
+    qwUserBackdrop.classList.remove("show");
+
+    const book = books[currentBookIndex];
+    const existingQuotes = (book?.quotes && book.quotes[currentQwUser]) || [];
+    const existingWords = (book?.words && book.words[currentQwUser]) || [];
+
+    buildQwInputs(qwQuotesInputs, 6, existingQuotes);
+    buildQwInputs(qwWordsInputs, 9, existingWords);
+
+    qwEditTitle.textContent = `Edit for ${currentQwUser} – ${book?.title || ""}`;
+    qwEditMsg.textContent = "";
+    qwEditBackdrop.classList.add("show");
+  });
+});
+
+function buildQwInputs(container, count, existing) {
+  container.innerHTML = "";
+  for (let i = 0; i < count; i++) {
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.value = existing[i] || "";
+    container.appendChild(inp);
+  }
+}
+
+qwEditSaveBtn.addEventListener("click", async () => {
+  const quoteInputs = Array.from(qwQuotesInputs.querySelectorAll("input"));
+  const wordInputs = Array.from(qwWordsInputs.querySelectorAll("input"));
+  const quotes = quoteInputs.map((i) => i.value.trim()).filter((x) => x.length);
+  const words = wordInputs.map((i) => i.value.trim()).filter((x) => x.length);
+
+  try {
+    await fetch(`${API_BASE}/books/${currentBookIndex}/qw`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user: currentQwUser,
+        quotes,
+        words,
+      }),
+    });
+    await fetchBooks();
+    // refresh view modal too
+    openQwModal(currentBookIndex);
+    qwEditBackdrop.classList.remove("show");
+  } catch (err) {
+    console.error(err);
+    qwEditMsg.textContent = "Error saving.";
   }
 });
 

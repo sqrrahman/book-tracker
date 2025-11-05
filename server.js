@@ -168,6 +168,45 @@ app.put("/books/:index/rating", async (req, res) => {
   }
 });
 
+// NEW: save quotes/words for a book and a user
+app.put("/books/:index/qw", async (req, res) => {
+  const idx = parseInt(req.params.index, 10);
+  const { user, quotes, words } = req.body;
+
+  if (Number.isNaN(idx)) {
+    return res.status(400).json({ error: "invalid index" });
+  }
+  if (!user || (user !== "A" && user !== "N")) {
+    return res.status(400).json({ error: "user must be A or N" });
+  }
+
+  try {
+    const file = await getFile();
+    const content = Buffer.from(file.content, "base64").toString("utf8");
+    const books = JSON.parse(content);
+
+    if (idx < 0 || idx >= books.length) {
+      return res.status(404).json({ error: "book not found" });
+    }
+
+    if (!books[idx].quotes) books[idx].quotes = { A: [], N: [] };
+    if (!books[idx].words) books[idx].words = { A: [], N: [] };
+
+    if (Array.isArray(quotes)) {
+      books[idx].quotes[user] = quotes;
+    }
+    if (Array.isArray(words)) {
+      books[idx].words[user] = words;
+    }
+
+    await putFile(books, file.sha, `Update quotes/words of book ${idx} for ${user}`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
