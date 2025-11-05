@@ -13,7 +13,7 @@
         <h1 class="title">TAGORES SHORT STORIES</h1>
         <!-- burger icon -->
         <button id="burgerBtn" class="burger-btn" aria-label="Menu">
-          &#9776;
+          ☰
         </button>
       </header>
 
@@ -222,7 +222,9 @@
         <div class="modal modal-add-books">
           <h2>Add Books</h2>
           <p class="small-muted">Enter titles (one per line, empty lines ignored):</p>
-          <textarea id="addBooksTextarea" rows="10" placeholder="Book 1&#10;Book 2&#10;Book 3"></textarea>
+          <textarea id="addBooksTextarea" rows="10" placeholder="Book 1
+Book 2
+Book 3"></textarea>
           <div class="modal-actions modal-actions-space">
             <button class="btn-secondary" id="addBooksCancel">Cancel</button>
             <button class="btn-primary" id="addBooksSave">Add</button>
@@ -291,5 +293,24 @@
         <p>Hosted on GitHub Pages · Data stored in GitHub via backend</p>
       </footer>
     </div>
+    <!-- Stardust JS: enables animated mouse trail effect -->
+    <script>
+      document.addEventListener('mousemove', function(e) {
+        const stardust = document.createElement('div');
+        stardust.className = 'stardust-particle';
+        stardust.style.left = e.clientX + 'px';
+        stardust.style.top = e.clientY + 'px';
+        // Random direction for particle animation
+        const randomX = (Math.random() - 0.5) * 40;
+        const randomY = (Math.random() - 0.5) * 40 - 20;
+        stardust.style.setProperty('--tx', `${randomX}px`);
+        stardust.style.setProperty('--ty', `${randomY}px`);
+        document.body.appendChild(stardust);
+        setTimeout(() => {
+          stardust.remove();
+        }, 1000);
+      });
+    </script>
   </body>
 </html>
+
