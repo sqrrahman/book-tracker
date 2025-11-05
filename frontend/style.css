@@ -1,0 +1,528 @@
+:root {
+  --bg: #0b1230;
+  --bg-panel: rgba(10, 14, 31, 0.85);
+  --bg-card: #0f1534;
+  --accent: #f3cfa7;
+  --text: #fff;
+  --muted: #b0b6ca;
+  --danger: #f87171;
+  --user-a: #fcbf49;
+  --user-n: #4cc9f0;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #192341 0%, #060a1d 65%);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 18px 60px;
+  position: relative;
+}
+
+.topbar {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.title {
+  font-family: "Cinzel", "Times New Roman", serif;
+  letter-spacing: 0.35rem;
+  font-size: clamp(2.3rem, 4vw, 3.1rem);
+  color: #ffe2bb;
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.tab {
+  border: none;
+  background: rgba(167, 139, 250, 0.04);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 999px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: linear-gradient(120deg, #a78bfa 0, #6c4ac9 100%);
+}
+
+.small-link {
+  margin-left: auto;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.panel {
+  display: none;
+}
+.panel.active {
+  display: block;
+}
+
+.books-list {
+  background: rgba(5, 8, 20, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  border-radius: 32px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.book-row {
+  background: rgba(1, 3, 15, 0.6);
+  border-radius: 26px;
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: 60px 2fr 230px 90px;
+  gap: 10px;
+  align-items: center;
+}
+
+.book-index {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px solid rgba(243, 207, 167, 0.6);
+  display: grid;
+  place-items: center;
+}
+
+.book-title {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* quotes button */
+.quotes-btn {
+  width: 58px;
+  height: 48px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.empty-text {
+  text-align: center;
+  color: var(--muted);
+}
+
+/* =============== MODALS =============== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+.modal-backdrop.show {
+  display: flex;
+}
+
+.modal {
+  background: #0f1534;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 22px 20px 16px;
+  min-width: 300px;
+  max-width: 420px;
+}
+
+/* Large modals */
+.modal-huge {
+  max-width: 40vw;
+  width: 40vw;
+  min-width: 520px;
+  padding: 28px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  text-align: center;
+}
+
+/* Rating modals */
+.modal-rate {
+  width: 46vw;
+  max-width: 800px;
+  min-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 26px 28px 20px;
+  text-align: center;
+}
+
+#rateModalTitle {
+  width: 100%;
+  font-size: 1.8rem;
+  text-align: center;
+}
+#rateForUser {
+  width: 100%;
+  text-align: center;
+}
+.rating-section {
+  width: 100%;
+  text-align: center;
+}
+.shape-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.rating-square {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+}
+#ratingInput {
+  width: 210px;
+  height: 60px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(15, 21, 52, 0.9);
+  color: #fff;
+  font-size: 1.3rem;
+  text-align: center;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.modal-actions {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+.modal-actions-space {
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.btn-secondary,
+.btn-primary {
+  border: none;
+  border-radius: 9px;
+  padding: 11px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.btn-secondary {
+  background: rgba(99, 102, 241, 0.05);
+  color: #e5e7eb;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #111827;
+}
+
+.small-msg {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+.small-muted {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+/* user cards */
+.user-card-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+}
+.user-card-big {
+  flex: 0 0 220px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.2rem;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+.user-card[data-user="A"],
+.user-card[data-qw-user="A"] {
+  background: rgba(252, 191, 73, 0.1);
+  border-color: rgba(252, 191, 73, 0.6);
+}
+.user-card[data-user="N"],
+.user-card[data-qw-user="N"] {
+  background: rgba(76, 201, 240, 0.08);
+  border-color: rgba(76, 201, 240, 0.6);
+}
+.user-card[data-user="A"].active,
+.user-card[data-qw-user="A"].active {
+  background: var(--user-a);
+  color: #1b1b1b;
+}
+.user-card[data-user="N"].active,
+.user-card[data-qw-user="N"].active {
+  background: var(--user-n);
+  color: #0f1534;
+}
+
+/* Quotes/Words view and edit */
+.modal-qw {
+  width: 70vw;
+  max-width: 1000px;
+  min-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+.modal-qw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.qw-edit-top {
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+#qwTitle {
+  font-size: 1.6rem;
+}
+.qw-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1.1fr 0.9fr;
+  gap: 14px;
+  flex: 1;
+}
+.qw-box {
+  background: rgba(1, 3, 15, 0.5);
+  border-radius: 16px;
+  padding: 12px 14px;
+  overflow-y: auto;
+}
+.qw-quotes-a {
+  border: 1px solid rgba(252, 191, 73, 0.6);
+}
+.qw-quotes-n {
+  border: 1px solid rgba(76, 201, 240, 0.6);
+}
+.qw-words-a {
+  border: 1px solid rgba(252, 191, 73, 0.35);
+}
+.qw-words-n {
+  border: 1px solid rgba(76, 201, 240, 0.35);
+}
+.qw-list {
+  list-style: disc;
+  margin-left: 18px;
+  margin-top: 6px;
+}
+.qw-list li {
+  margin-bottom: 4px;
+}
+
+.modal-qw-edit {
+  width: 55vw;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.qw-input-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.qw-input-grid input {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #fff;
+  font-size: 0.95rem;
+}
+.qw-words-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* small rating squares */
+.rating-small-square {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.footer {
+  margin-top: 36px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* ========================= */
+/* ==== NEW LIBRARIAN ====== */
+/* ========================= */
+
+/* Burger icon */
+.burger-btn {
+  position: absolute;
+  top: 28px;
+  right: 26px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.burger-btn:hover {
+  opacity: 0.8;
+}
+
+/* Librarian modal */
+.modal-librarian {
+  max-width: 480px;
+  text-align: center;
+}
+.librarian-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 18px 0;
+}
+.librarian-btn {
+  height: 100px;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s;
+}
+.add-btn-lite {
+  border-color: #f3cfa7;
+  color: #f3cfa7;
+}
+.remove-btn-lite {
+  border-color: #f87171;
+  color: #f87171;
+}
+.rename-btn-lite {
+  border-color: #4cc9f0;
+  color: #4cc9f0;
+}
+.sort-btn-lite {
+  border-color: #b0b6ca;
+  color: #b0b6ca;
+}
+.librarian-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Add Books modal */
+.modal-add-books textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  padding: 10px;
+  resize: none;
+  font-family: inherit;
+}
+
+/* Remove / Confirm / Rename */
+.modal-remove-books input,
+.modal-rename input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  padding: 8px 10px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+/* confirm delete list */
+.modal-confirm-delete .qw-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+.modal-confirm-delete h2 {
+  margin-bottom: 8px;
+}
+
+/* sort placeholder */
+.modal-sort {
+  text-align: center;
+}
+
+/* responsive */
+@media (max-width: 950px) {
+  .book-row {
+    grid-template-columns: 1fr;
+  }
+  .modal-rate,
+  .modal-huge,
+  .modal-qw,
+  .modal-qw-edit {
+    max-width: 95vw;
+    width: 95vw;
+  }
+  .qw-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+}
