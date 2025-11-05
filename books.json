@@ -1,7 +1,10 @@
 [
   {
     "title": "Ramkanaiyer Nirbudhdhita",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 2.5
+    }
   },
   {
     "title": "The Dokander",
