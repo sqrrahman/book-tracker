@@ -21,17 +21,15 @@
         <button class="add-btn" id="addBookBtn">+ Add Book</button>
       </div>
 
-      <!-- BOOKS PANEL -->
       <section class="panel active" id="booksPanel">
         <div class="books-list" id="booksList"></div>
       </section>
 
-      <!-- QUOTES PANEL -->
       <section class="panel" id="quotesPanel">
         <p class="empty-text">Quotes not connected to backend yet.</p>
       </section>
 
-      <!-- Add Book Modal -->
+      <!-- add-book modal -->
       <div class="modal-backdrop" id="bookModalBackdrop">
         <div class="modal">
           <h2>Add a book</h2>
@@ -55,7 +53,7 @@
         </div>
       </div>
 
-      <!-- 1) PICK USER MODAL -->
+      <!-- who is rating modal -->
       <div class="modal-backdrop" id="rateUserBackdrop">
         <div class="modal modal-huge" id="rateUserModal">
           <p class="modal-top-note" id="rateUserBookTitle">the corresponding book title</p>
@@ -72,28 +70,29 @@
         </div>
       </div>
 
-      <!-- 2) ENTER RATING MODAL -->
+      <!-- rate modal -->
       <div class="modal-backdrop" id="rateValueBackdrop">
         <div class="modal modal-rate" id="rateModal">
           <h2 id="rateModalTitle">Rate this book</h2>
-
           <p class="small-muted" id="rateForUser">Rating for: A</p>
 
           <div class="rating-section">
             <p class="small-muted">Select rating (0 – 10, step 0.5):</p>
-            <div class="shape-row" id="ratingPentagons"></div>
-            <input
-              type="number"
-              id="ratingInput"
-              min="0"
-              max="10"
-              step="0.5"
-              value="5"
-              inputmode="decimal"
-            />
+            <div class="rating-line">
+              <div class="shape-row" id="ratingPentagons"></div>
+              <input
+                type="number"
+                id="ratingInput"
+                min="0"
+                max="10"
+                step="0.5"
+                value="5"
+                inputmode="decimal"
+              />
+            </div>
           </div>
 
-          <div class="modal-actions modal-actions-left" id="rateActions">
+          <div class="modal-actions modal-actions-space">
             <button class="btn-secondary" id="cancelRateBtn">Cancel</button>
             <button class="btn-primary" id="okRateBtn">Okay</button>
           </div>
