@@ -94,7 +94,7 @@ body {
   border-radius: 26px;
   padding: 18px 20px;
   display: grid;
-  grid-template-columns: 60px 2fr 230px 90px;
+  grid-template-columns: 60px 2fr 230px 90px 90px; /* extra for T */
   gap: 10px;
   align-items: center;
 }
@@ -115,6 +115,21 @@ body {
 
 /* quotes button */
 .quotes-btn {
+  width: 58px;
+  height: 48px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+/* texts (T) button */
+.texts-btn {
   width: 58px;
   height: 48px;
   border-radius: 18px;
@@ -403,6 +418,77 @@ input[type="number"] {
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* ====== NEW: Texts (T) modal styles ====== */
+.modal-tx {
+  width: 70vw;
+  max-width: 1000px;
+  min-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+.modal-tx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tx-edit-top {
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+#txTitle {
+  font-size: 1.6rem;
+}
+.tx-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 14px;
+  flex: 1;
+}
+.tx-box {
+  background: rgba(1, 3, 15, 0.5);
+  border-radius: 16px;
+  padding: 12px 14px;
+  overflow-y: auto;
+}
+.tx-a-notes {
+  border: 1px solid rgba(252, 191, 73, 0.6);
+}
+.tx-a-comments {
+  border: 1px solid rgba(252, 191, 73, 0.35);
+}
+.tx-n-notes {
+  border: 1px solid rgba(76, 201, 240, 0.6);
+}
+.tx-n-comments {
+  border: 1px solid rgba(76, 201, 240, 0.35);
+}
+.tx-content p {
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+.modal-tx-edit {
+  width: 55vw;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.modal-tx-edit textarea {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
 .footer {
   margin-top: 36px;
   text-align: center;
@@ -517,11 +603,14 @@ input[type="number"] {
   .modal-rate,
   .modal-huge,
   .modal-qw,
-  .modal-qw-edit {
+  .modal-qw-edit,
+  .modal-tx,
+  .modal-tx-edit {
     max-width: 95vw;
     width: 95vw;
   }
-  .qw-grid {
+  .qw-grid,
+  .tx-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }

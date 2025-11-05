@@ -4,11 +4,13 @@ const USER_COLORS = { A: "#fcbf49", N: "#4cc9f0" };
 let booksListEl = null;
 let onRateCb = null;
 let onQwCb = null;
+let onTxCb = null; // NEW
 
-export function initBooks({ onRate, onQw }) {
+export function initBooks({ onRate, onQw, onTx }) {
   booksListEl = document.getElementById("booksList");
   onRateCb = onRate;
   onQwCb = onQw;
+  onTxCb = onTx;
 }
 
 function renderRatingRow(label, val, color) {
@@ -88,10 +90,19 @@ export function renderBooks(books) {
       if (onQwCb) onQwCb(idx);
     });
 
+    // NEW: T button
+    const textsBtn = document.createElement("button");
+    textsBtn.className = "texts-btn";
+    textsBtn.textContent = "T";
+    textsBtn.addEventListener("click", () => {
+      if (onTxCb) onTxCb(idx);
+    });
+
     row.appendChild(index);
     row.appendChild(title);
     row.appendChild(ratingBlock);
     row.appendChild(quotesBtn);
+    row.appendChild(textsBtn); // add after Q
 
     booksListEl.appendChild(row);
   });

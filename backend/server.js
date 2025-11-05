@@ -233,5 +233,40 @@ app.put("/books/:index/qw", async (req, res) => {
   }
 });
 
+// --- NEW: Update texts (notes/comments) ---
+app.put("/books/:index/tx", async (req, res) => {
+  const idx = parseInt(req.params.index, 10);
+  const { user, notes, comments } = req.body;
+  if (Number.isNaN(idx)) return res.status(400).json({ error: "invalid index" });
+  if (!user || (user !== "A" && user !== "N"))
+    return res.status(400).json({ error: "user must be A or N" });
+
+  try {
+    const file = await getFile();
+    const content = Buffer.from(file.content, "base64").toString("utf8");
+    const books = JSON.parse(content);
+    if (idx < 0 || idx >= books.length)
+      return res.status(404).json({ error: "book not found" });
+
+    if (!books[idx].texts) {
+      books[idx].texts = {
+        A: { notes: "", comments: "" },
+        N: { notes: "", comments: "" },
+      };
+    }
+
+    books[idx].texts[user] = {
+      notes: typeof notes === "string" ? notes : "",
+      comments: typeof comments === "string" ? comments : "",
+    };
+
+    await putFile(books, file.sha, `Update texts of book ${idx} for ${user}`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("Server running on port", PORT));

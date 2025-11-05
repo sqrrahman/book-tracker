@@ -30,6 +30,16 @@ export async function updateQw(index, user, quotes, words) {
   if (!res.ok) throw new Error("Error saving Q/W");
 }
 
+// --- texts (notes/comments) ---
+export async function updateTx(index, user, notes, comments) {
+  const res = await fetch(`${API_BASE}/books/${index}/tx`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user, notes, comments }),
+  });
+  if (!res.ok) throw new Error("Error saving texts");
+}
+
 // --- librarian: add ---
 export async function bulkAdd(titles) {
   const res = await fetch(`${API_BASE}/books/bulk-add`, {

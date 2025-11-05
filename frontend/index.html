@@ -135,6 +135,67 @@
       </div>
 
       <!-- ===================================== -->
+      <!-- T (Texts) main view                   -->
+      <!-- ===================================== -->
+      <div class="modal-backdrop" id="txBackdrop">
+        <div class="modal modal-tx">
+          <div class="modal-tx-header">
+            <h2 id="txTitle">Texts</h2>
+            <button class="btn-primary tx-edit-top" id="txEditBtn">Edit</button>
+          </div>
+          <div class="tx-grid">
+            <div class="tx-box tx-a-notes">
+              <h3>A – Notes</h3>
+              <div id="txANotes" class="tx-content"></div>
+            </div>
+            <div class="tx-box tx-a-comments">
+              <h3>A – Comments</h3>
+              <div id="txAComments" class="tx-content"></div>
+            </div>
+            <div class="tx-box tx-n-notes">
+              <h3>N – Notes</h3>
+              <div id="txNNotes" class="tx-content"></div>
+            </div>
+            <div class="tx-box tx-n-comments">
+              <h3>N – Comments</h3>
+              <div id="txNComments" class="tx-content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T: pick user to edit -->
+      <div class="modal-backdrop" id="txUserBackdrop">
+        <div class="modal modal-huge">
+          <h2>Choose user</h2>
+          <div class="user-card-row">
+            <div class="user-card user-card-big" data-tx-user="A">A</div>
+            <div class="user-card user-card-big" data-tx-user="N">N</div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="txUserCancelBtn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- T: actual edit (2 big textareas) -->
+      <div class="modal-backdrop" id="txEditBackdrop">
+        <div class="modal modal-tx-edit">
+          <h2 id="txEditTitle">Edit</h2>
+          <p class="small-muted">Empty values are allowed.</p>
+          <label class="small-muted" for="txNotesInput">Notes</label>
+          <textarea id="txNotesInput" rows="5"></textarea>
+          <label class="small-muted" for="txCommentsInput">Comments</label>
+          <textarea id="txCommentsInput" rows="5"></textarea>
+          <p id="txEditMsg" class="small-msg"></p>
+          <div class="modal-actions modal-actions-space">
+            <button class="btn-secondary" id="txEditCancelBtn">Cancel</button>
+            <button class="btn-primary" id="txEditSaveBtn">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================== -->
       <!-- Librarian main modal (2x2 buttons)    -->
       <!-- ===================================== -->
       <div class="modal-backdrop" id="librarianBackdrop">

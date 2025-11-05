@@ -4,6 +4,7 @@ import { initBooks, renderBooks } from "./books.js";
 import { initRating, openRateUserModal } from "./rating.js";
 import { initQw, openQwModal } from "./qw.js";
 import { initLibrarian } from "./librarian.js";
+import { initTx, openTxModal } from "./tx.js";
 
 const tabs = document.querySelectorAll(".tab");
 const panels = {
@@ -41,6 +42,7 @@ async function init() {
   initBooks({
     onRate: (idx) => openRateUserModal(idx),
     onQw: (idx) => openQwModal(idx),
+    onTx: (idx) => openTxModal(idx),
   });
 
   initRating({
@@ -49,6 +51,11 @@ async function init() {
   });
 
   initQw({
+    getBooks: getBooksLocal,
+    refreshBooks,
+  });
+
+  initTx({
     getBooks: getBooksLocal,
     refreshBooks,
   });
