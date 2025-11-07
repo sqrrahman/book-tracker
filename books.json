@@ -82,7 +82,10 @@
   },
   {
     "title": "ইঁদুরের ভোজ",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 5.5
+    }
   },
   {
     "title": "ঘাটের কথা",
