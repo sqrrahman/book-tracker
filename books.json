@@ -114,7 +114,10 @@
   },
   {
     "title": "দেনাপাওনা",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 5
+    }
   },
   {
     "title": "পোস্টমাস্টার",
