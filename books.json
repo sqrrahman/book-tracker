@@ -164,7 +164,10 @@
   },
   {
     "title": "রামকানাইয়ের নির্বুদ্ধিতা",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 5.5
+    }
   },
   {
     "title": "ব্যবধান",
