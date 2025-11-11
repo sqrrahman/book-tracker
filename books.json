@@ -157,7 +157,10 @@
   },
   {
     "title": "গিন্নি",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 3.5
+    }
   },
   {
     "title": "রামকানাইচেয়ার নিরুদ্দিষ্টতা",
