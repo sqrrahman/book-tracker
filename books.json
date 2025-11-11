@@ -100,7 +100,10 @@
   },
   {
     "title": "রাজপথের কথা",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 4.5
+    }
   },
   {
     "title": "মুকুট",
