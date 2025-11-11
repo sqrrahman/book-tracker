@@ -107,7 +107,10 @@
   },
   {
     "title": "মুকুট",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 4
+    }
   },
   {
     "title": "দেনাপাওনা",
