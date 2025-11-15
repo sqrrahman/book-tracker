@@ -103,7 +103,7 @@ export function openTxModal(bookIndex) {
   const books = getBooksFn ? getBooksFn() : [];
   const book = books[bookIndex];
 
-  txTitle.textContent = `Texts – ${book?.title || ""}`;
+  txTitle.textContent = `Notes & Comments – ${book?.title || ""}`;
 
   const aTexts = book?.texts?.A || { notes: "", comments: "" };
   const nTexts = book?.texts?.N || { notes: "", comments: "" };

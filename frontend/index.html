@@ -146,21 +146,24 @@
       <div class="modal-backdrop" id="txBackdrop">
         <div class="modal modal-tx">
           <div class="modal-tx-header">
-            <h2 id="txTitle">Texts</h2>
+            <h2 id="txTitle">Notes &amp; Comments</h2>
             <button class="btn-primary tx-edit-top" id="txEditBtn">Edit</button>
           </div>
           <div class="tx-grid">
+            <!-- Top row: Notes (A left, N right) -->
             <div class="tx-box tx-a-notes">
               <h3>A – Notes</h3>
               <div id="txANotes" class="tx-content"></div>
             </div>
-            <div class="tx-box tx-a-comments">
-              <h3>A – Comments</h3>
-              <div id="txAComments" class="tx-content"></div>
-            </div>
             <div class="tx-box tx-n-notes">
               <h3>N – Notes</h3>
               <div id="txNNotes" class="tx-content"></div>
+            </div>
+
+            <!-- Bottom row: Comments (A left, N right) -->
+            <div class="tx-box tx-a-comments">
+              <h3>A – Comments</h3>
+              <div id="txAComments" class="tx-content"></div>
             </div>
             <div class="tx-box tx-n-comments">
               <h3>N – Comments</h3>
