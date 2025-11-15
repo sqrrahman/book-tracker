@@ -639,6 +639,35 @@ input[type="number"] {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
+  /* ===== Custom thin scrollbars for Quotes/Words + Notes/Comments ===== */
+  /* Chrome, Edge, Safari */
+  .qw-box::-webkit-scrollbar,
+  .tx-box::-webkit-scrollbar {
+    width: 4px;              /* thin */
+  }
+
+  .qw-box::-webkit-scrollbar-track,
+  .tx-box::-webkit-scrollbar-track {
+    background: transparent; /* no box around the thumb */
+  }
+
+  .qw-box::-webkit-scrollbar-thumb,
+  .tx-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.35); /* light line */
+    border-radius: 999px;                  /* round ends */
+  }
+
+  .qw-box::-webkit-scrollbar-button,
+  .tx-box::-webkit-scrollbar-button {
+    display: none;            /* removes top/bottom arrows */
+  }
+
+  /* Firefox */
+  .qw-box,
+  .tx-box {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+  }
 }
 
 /* ===== Stardust particle effect ===== */
