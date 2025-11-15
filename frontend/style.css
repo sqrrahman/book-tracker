@@ -315,10 +315,28 @@ input[type="number"] {
   background: rgba(1, 3, 15, 0.5);
   border-radius: 16px;
   padding: 12px 14px;
-  overflow-y: auto;        /* keep scrolling inside the box */
-  max-height: 260px;       /* FIXED box height */
+  overflow-y: auto;
+  max-height: 260px;
   min-height: 180px;
+
+  /* Firefox thin scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
+.qw-box::-webkit-scrollbar {
+  width: 4px;
+}
+.qw-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+.qw-box::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+}
+.qw-box::-webkit-scrollbar-button {
+  display: none;
+}
+
 .qw-quotes-a {
   border: 1px solid rgba(252, 191, 73, 0.6);
 }
@@ -409,10 +427,26 @@ input[type="number"] {
   background: rgba(1, 3, 15, 0.5);
   border-radius: 16px;
   padding: 12px 14px;
-  overflow-y: auto;        /* scroll inside the box */
-  max-height: 260px;       /* fixed box height */
-  min-height: 180px;       /* optional: don't shrink too much */
+  overflow-y: auto;
+  max-height: 260px;
+  min-height: 180px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
+.tx-box::-webkit-scrollbar {
+  width: 4px;
+}
+.tx-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tx-box::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+}
+.tx-box::-webkit-scrollbar-button {
+  display: none;
+}
+
 .tx-a-notes {
   border: 1px solid rgba(252, 191, 73, 0.6);
 }
@@ -639,35 +673,7 @@ input[type="number"] {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
-  /* ===== Custom thin scrollbars for Quotes/Words + Notes/Comments ===== */
-  /* Chrome, Edge, Safari */
-  .qw-box::-webkit-scrollbar,
-  .tx-box::-webkit-scrollbar {
-    width: 4px;              /* thin */
-  }
-
-  .qw-box::-webkit-scrollbar-track,
-  .tx-box::-webkit-scrollbar-track {
-    background: transparent; /* no box around the thumb */
-  }
-
-  .qw-box::-webkit-scrollbar-thumb,
-  .tx-box::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.35); /* light line */
-    border-radius: 999px;                  /* round ends */
-  }
-
-  .qw-box::-webkit-scrollbar-button,
-  .tx-box::-webkit-scrollbar-button {
-    display: none;            /* removes top/bottom arrows */
-  }
-
-  /* Firefox */
-  .qw-box,
-  .tx-box {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
-  }
+  
 }
 
 /* ===== Stardust particle effect ===== */
