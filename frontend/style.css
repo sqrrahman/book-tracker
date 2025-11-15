@@ -324,7 +324,7 @@ input[type="number"] {
   scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 .qw-box::-webkit-scrollbar {
-  width: 4px;
+  width: 1px;
 }
 .qw-box::-webkit-scrollbar-track {
   background: transparent;
@@ -434,7 +434,7 @@ input[type="number"] {
   scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 .tx-box::-webkit-scrollbar {
-  width: 4px;
+  width: 1px;
 }
 .tx-box::-webkit-scrollbar-track {
   background: transparent;
