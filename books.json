@@ -225,7 +225,10 @@
   },
   {
     "title": "দালিয়া",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 7.5
+    }
   },
   {
     "title": "কঙ্কাল",
