@@ -218,7 +218,10 @@
   },
   {
     "title": "সম্পত্তি-সমর্পণ",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 2.5
+    }
   },
   {
     "title": "দালিয়া",
