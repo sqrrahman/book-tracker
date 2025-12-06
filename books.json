@@ -350,7 +350,10 @@
   },
   {
     "title": "স্বর্ণমৃগ",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 4
+    }
   },
   {
     "title": "রীতিমত নভেল",
