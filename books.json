@@ -364,7 +364,10 @@
   },
   {
     "title": "জয়পরাজয়",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 4.5
+    }
   },
   {
     "title": "কাবুলিওয়ালা",
