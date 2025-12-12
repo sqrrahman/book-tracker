@@ -357,7 +357,10 @@
   },
   {
     "title": "রীতিমত নভেল",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 3
+    }
   },
   {
     "title": "জয়পরাজয়",
