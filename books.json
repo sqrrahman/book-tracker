@@ -396,7 +396,10 @@
   },
   {
     "title": "সুভা",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 8
+    }
   },
   {
     "title": "মহামায়া",
