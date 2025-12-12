@@ -371,7 +371,10 @@
   },
   {
     "title": "কাবুলিওয়ালা",
-    "status": "To Read"
+    "status": "To Read",
+    "ratings": {
+      "A": 8.5
+    }
   },
   {
     "title": "ছুটি",
